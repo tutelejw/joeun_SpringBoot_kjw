@@ -1,0 +1,237 @@
+
+# 03ETC : SpringBoot Project.
+## UserRestController Test 
+
+1. Spring13 (RestFul Client Use JSON)
+
+1.1 client.app.RestHttpClientApp.java
+
+: RestHttpClientApp.ReqeustHttpGet_UseJsonSimple(); 실행
+: URL 아래로 변경 실행 
+
+
+1.2  String url = "http://127.0.0.1:8000/userAPI/getUser?name=홍길동&age=10";
+
+@RequestMapping(value="getUser" , method=RequestMethod.GET )
+public User getUser	(	@RequestParam("name") String name,
+											@RequestParam("age") int age) throws Exception{
+
+
+1.3  String url = "http://127.0.0.1:8000/userAPI/getUserMore/user01?name=홍길동&age=10";
+
+@RequestMapping(value="getUserMore/{value}" , method=RequestMethod.GET )
+public Map getUserMore	(	@PathVariable String value,
+													@RequestParam("name") String name,
+													@RequestParam("age") int age) throws Exception{
+
+
+1.4 String url  = http://127.0.0.1:8000/userAPI/getUser  
+       JSON     {"name":"홍길동" , "age":"10"}
+
+@RequestMapping(value="getUser" , method=RequestMethod.POST )
+public User getUser	( @RequestBody User user ) throws Exception{
+
+
+
+1.5 String url  = http://127.0.0.1:8000/userAPI/getUserMore/user01
+       JSON    {"name":"홍길동" , "age":"10"}
+
+@RequestMapping(value="getUserMore/{value}" , method=RequestMethod.POST )
+public Map getUserMore	(  	@PathVariable String value, 
+													@RequestBody User user ) throws Exception{
+
+
+
+2. Postman Tool 이용 Test
+
+
+=======================================================
+0. UserRestController.java  / User.java
+
+@RestController
+@RequestMapping("/userAPI/*")
+public class UserRestController {
+	///Field
+	///Constructor
+	public UserRestController(){
+		System.out.println(":: UserRestController default Contructor call");
+	}
+	
+	
+	//1.1 Client 로 Domain Object 만 전송할 경우.
+	//요청 미디어타입 : application/json ==> 즉 데이터교환 json 
+	//http://127.0.0.1:8000/userAPI/getUser?name=user02&age=10
+	@RequestMapping(value="getUser" , method=RequestMethod.GET )
+	public User getUser	(	@RequestParam("name") String name,
+											@RequestParam("age") int age) throws Exception{
+	
+		System.out.println();
+		System.out.println(name);
+		System.out.println(age);
+		
+		User returnUser = new User();
+		returnUser.setUserId("AAA");
+		returnUser.setUserName("GET:이순신");
+		returnUser.setAge(100);
+		System.out.println(returnUser);
+		
+		return returnUser;
+	}
+
+	// 1.1 Client 로 Domain Object + 기타 Data 를 JSON 으로 전송할 경우.
+	//요청 미디어타입 : application/json ==> 즉 데이터교환 json 
+	//http://127.0.0.1:8000/userAPI/getUserMore/user01?name=user02&age=10
+	@RequestMapping(value="getUserMore/{value}" , method=RequestMethod.GET )
+	public Map getUserMore	(	@PathVariable String value,
+													@RequestParam("name") String name,
+													@RequestParam("age") int age) throws Exception{
+		System.out.println();
+		System.out.println(value);
+		System.out.println(name);
+		System.out.println(age);
+		
+		User returnUser = new User();
+		returnUser.setUserId("AAA");
+		returnUser.setUserName("GET:이순신");
+		returnUser.setAge(100);
+		System.out.println(returnUser);
+		
+		Map map = new HashMap();
+		map.put("user",returnUser);
+		//==> 단순히 name=value 의 Data 를 저장할 경우는 ????
+		map.put("message","ok");
+
+		return map;
+	}
+
+	// 2.1 Client 로 Domain Object 만 전송할 경우.
+	//http://192.168.0.29:8000/userAPI/getUser
+	// @ModelAttribute("user") User user : Client 의 Form Data => User 바인딩. 
+	// @RequestBody User user : Client JSON Datga => User 바인딩
+	@RequestMapping(value="getUser" , method=RequestMethod.POST )
+	public User getUser	( @RequestBody User user ) throws Exception{
+		System.out.println();
+		System.out.println("[ Client JSON Data ]");
+		System.out.println("1 : "+user);
+		
+		System.out.println("[To Client Data]");
+		User returnUser = new User();
+		returnUser.setUserId("AAA");
+		returnUser.setUserName("POST:이순신");
+		System.out.println("2 : "+returnUser);
+		
+		return returnUser;
+	}
+	
+	
+	
+	// 2.1 Client 로 Domain Object + 기타 Data 를 JSON 으로 전송할 경우.
+	//http://192.168.0.29:8000/userAPI/getUserMore/user01
+	// @ModelAttribute("user") User user : Client 의 Form Data => User 바인딩. 
+	// @RequestBody User user : Client JSON Datga => User 바인딩	
+	@RequestMapping(value="getUserMore/{value}" , method=RequestMethod.POST )
+	public Map getUserMore	(  	@PathVariable String value, 
+													@RequestBody User user ) throws Exception{	
+		System.out.println();
+		System.out.println("[ Client JSON Data ]");
+		System.out.println(value);
+		System.out.println("1 : "+user);
+		
+		System.out.println("[To Client Data]");
+		User returnUser = new User();
+		returnUser.setUserId("AAA");
+		returnUser.setUserName("POST:이순신");
+		System.out.println("2 : "+returnUser);
+		
+		Map map = new HashMap();
+		map.put("user",returnUser);
+		//==> 단순히 name=value 의 Data 를 저장할 경우는 ????
+		map.put("message","ok");
+
+		return map;
+	}	
+}
+
+
+public class User implements Serializable {
+
+	///Field
+    private String userId; 			// 회원 ID 
+    private String userName;		// 회원 이름 
+    private String password;     // 비밀번호 
+    private Integer age;    			// 나이 :: Integer wrapper class 사용 :: 추후 용도 확인  
+    private int grade;    				// 등급 :: int primitive 사용 :: :: 추후 용도 확인 
+    private Timestamp regDate	; // 가입일자 
+    //private Timestamp regDate	= new Timestamp(new Date().getTime()); // 가입일자
+    private boolean active; 
+    
+    ///Constructor
+    public User() {
+	}
+    public User (	String userId, String userName,String password, 
+    							Integer age, int grade ) {
+		this.userId = userId;
+		this.userName = userName;
+		this.password = password;
+		this.age = age;
+		this.grade = grade;
+	}    
+
+	///Method (getter/setter)
+	public String getUserId(){
+		return this.userId;
+	}
+	public void setUserId( String userId ){
+	   this.userId= userId;
+	}
+	public String getPassword(){
+	   return this.password;
+	}
+	public void setPassword( String password ){
+	   this.password= password;
+	}
+	public Integer getAge() {
+		return age;
+	}
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public java.sql.Timestamp getRegDate() {
+		return regDate;
+	}
+	public void setRegDate(java.sql.Timestamp regDate) {
+		this.regDate = regDate;
+	}
+	public int getGrade() {
+		return grade;
+	}
+	public void setGrade(int grade) {
+		this.grade = grade;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	public boolean isActive() {
+		return active;
+	}
+	@Override
+	public String toString() {
+		return "User [userid=" + userId + ", userName=" + userName + ", password="
+				+ password + ", age=" + age + ", grade=" + grade+ ", active=" + active
+				+ ", regDate=" + regDate + "]";
+	}
+}//end of class
+
+
+
+1. UserRestController.java 를 Postman Test 할수 있게 Text 작성해 주세요.
+    UserRestController_PostMan_Test.txt 로 만들어주세요.
+
+
+=======================================================

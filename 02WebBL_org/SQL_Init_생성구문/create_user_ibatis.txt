@@ -1,0 +1,21 @@
+-- 1. 사용자(계정) 생성
+CREATE USER ibatis IDENTIFIED BY ibatis;
+
+-- 2. 기본 권한 부여
+GRANT CONNECT, RESOURCE TO ibatis;
+
+-- 3. 추가 권한 (DDL 작업용)
+GRANT CREATE TABLE TO ibatis;
+GRANT ALTER ANY TABLE TO ibatis;
+GRANT DROP ANY TABLE TO ibatis;
+GRANT CREATE SEQUENCE TO ibatis;
+GRANT CREATE VIEW TO ibatis;
+GRANT CREATE PROCEDURE TO ibatis;
+
+-- 4. 필요한 경우, 공간 할당 허용 (기본 테이블스페이스에)
+ALTER USER ibatis DEFAULT TABLESPACE USERS;
+ALTER USER ibatis QUOTA UNLIMITED ON USERS;
+
+ibatis 계정 비번을 ibatis로 바꾸는 구문
+
+ALTER USER ibatis IDENTIFIED BY ibatis;

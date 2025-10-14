@@ -1,0 +1,12 @@
+//////////////////////////////////////////
+// Lombok(????) 설치  
+//////////////////////////////////////////
+
+1.  projectlombok.org
+
+2. Download : lombok.jar
+
+3. java -jar lombok.jar   
+   : 설치할 [eclipse_HOME]/eclipse.exe 선택 //==> [eclipse_HOME]/lombok.jar 확인
+
+4. eclipse 재시작 

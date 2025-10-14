@@ -1,0 +1,143 @@
+====================================
+UserRestController Postman Test Guide
+====================================
+
+Server URL
+-----------
+http://localhost:8000/userAPI/
+
+공통 헤더
+----------
+Content-Type: application/json   (POST 시 필수)
+Accept: application/json         (선택, 응답 JSON)
+
+----------------------------------------
+1. GET 요청 테스트
+----------------------------------------
+
+[1] /userAPI/getUser
+---------------------
+URL:
+GET http://localhost:8000/userAPI/getUser?name=user02&age=10
+
+Headers:
+Accept: application/json
+
+Body: (없음)
+
+예상 응답(JSON):
+{
+  "userId": "AAA",
+  "userName": "GET:이순신",
+  "password": null,
+  "age": 100,
+  "grade": 0,
+  "regDate": null,
+  "active": false
+}
+
+----------------------------------------
+[2] /userAPI/getUserMore/{value}
+----------------------------------------
+URL:
+GET http://localhost:8000/userAPI/getUserMore/user01?name=user02&age=10
+
+Headers:
+Accept: application/json
+
+Body: (없음)
+
+예상 응답(JSON):
+{
+  "user": {
+    "userId": "AAA",
+    "userName": "GET:이순신",
+    "password": null,
+    "age": 100,
+    "grade": 0,
+    "regDate": null,
+    "active": false
+  },
+  "message": "ok"
+}
+
+----------------------------------------
+2. POST 요청 테스트
+----------------------------------------
+
+[3] /userAPI/getUser
+---------------------
+URL:
+POST http://localhost:8000/userAPI/getUser
+
+Headers:
+Content-Type: application/json
+Accept: application/json
+
+Body (raw → JSON):
+{
+  "userId": "user01",
+  "userName": "홍길동",
+  "password": "1234",
+  "age": 20,
+  "grade": 1
+}
+
+예상 응답(JSON):
+{
+  "userId": "AAA",
+  "userName": "POST:이순신",
+  "password": null,
+  "age": null,
+  "grade": 0,
+  "regDate": null,
+  "active": false
+}
+
+----------------------------------------
+[4] /userAPI/getUserMore/{value}
+----------------------------------------
+URL:
+POST http://localhost:8000/userAPI/getUserMore/user01
+
+Headers:
+Content-Type: application/json
+Accept: application/json
+
+Body (raw → JSON):
+{
+  "userId": "user02",
+  "userName": "김유신",
+  "password": "5678",
+  "age": 30,
+  "grade": 2
+}
+
+예상 응답(JSON):
+{
+  "user": {
+    "userId": "AAA",
+    "userName": "POST:이순신",
+    "password": null,
+    "age": null,
+    "grade": 0,
+    "regDate": null,
+    "active": false
+  },
+  "message": "ok"
+}
+
+----------------------------------------
+요약 표
+----------------------------------------
+번호 | 메서드 | 엔드포인트 | Body | Content-Type | 설명
+------------------------------------------------------------
+① | GET | /userAPI/getUser?name=user02&age=10 | X | 없음 | User JSON 응답
+② | GET | /userAPI/getUserMore/user01?name=user02&age=10 | X | 없음 | Map(JSON) 응답
+③ | POST | /userAPI/getUser | JSON | application/json | User JSON 응답
+④ | POST | /userAPI/getUserMore/user01 | JSON | application/json | Map(JSON) 응답
+
+참고:
+@RequestParam → 쿼리스트링 name=value
+@RequestBody → JSON body 바인딩
+@PathVariable → URL 일부 바인딩
