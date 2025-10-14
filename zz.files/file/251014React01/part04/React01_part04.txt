@@ -1,0 +1,30 @@
+
+===========================
+cd c:\
+cd c:\workspaceReact
+
+md 00react-prepare
+cd 00react-prepare
+
+create-react-app .
+
+dir
+
+npm start
+==> Browser 확인.
+
+
+
+===========================
+==> 00react-app_base.zip 사용, 시간절약(?).
+===========================
+md 00react-prepare
+
+
+=> 00react-app_base.zip  copy & 현재폴더 압축풀고. & 삭제
+=> package.json / pakcage-lock.json 
+=>  name  ==> 00react-prepare 변경
+
+cd 00react-prepare
+npm start
+==> Browser 확인.

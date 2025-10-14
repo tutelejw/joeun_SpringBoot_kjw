@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>JSMore : function / Arrow Function / 익명함수 </title>
+
+  <script type="text/javascript">
+/////////////////////////////////////////////////////////////////////////////////
+
+//==> 수강생 코딩 확인
+
+/////////////////////////////////////////////////////////////////////////////////
+</script>
+
+
+</head>
+
+<body>
+  
+    <input type="button" value="testFunction() call" onclick="testFunction()"/>
+    <br/><br/><br/>
+
+    <input type="button" value="testArrowFunction01() call" onclick="testArrowFunction01()"/>
+    <br/><br/><br/>
+
+    <input type="button" value="testArrowFunction02(arg) 파라미터 없이 testArrowFunction02() call" onclick="testArrowFunction02()"/>
+    <br/>
+    출력결과 : undefined 확인
+    <br/><br/><br/>
+
+    <input type="button" value="testArrowFunction02(arg) 파라미터 전달 testArrowFunction02('data') call" onclick="testArrowFunction02('data')"/>
+    <br/><br/><br/>
+
+    <input type="button" value="Function sum01(num1, num2), 호출 sum01(10,20) Call" onclick="sum01(10,20)"/>
+    <br/><br/><br/>
+
+    <input type="button" value="익명함수를 가지고 있는  변수 sum02 Call" onclick="sum02"/>
+    <br/>호출불가???... : 쉽게 생각합시다. : 호출안됨.
+    <br/>의미 : onClick 시 sum02를 참조만 하고 있겠다. 호출은 하지 않는다 / 문법적 문제없음.
+    <br/><br/><br/>
+
+    아래의 3개는 호출됨, 이렇게 사용하는 구나(?), 더 나아가 객체지향의 O/R 생각, Java 의 특징 명확성 , JS는 이런방법
+    <br/>
+    <input type="button" value="익명함수를 가지고 있는  변수 sum02를 sum2(10,20) Call" onclick="sum02(10,20)"/>
+    <br/><br/><br/>
+
+    <input type="button" value="익명함수를 가지고 있는  변수 sum02를 sum2(10) Call" onclick="sum02(10)"/>
+    <br/><br/><br/>
+
+    <input type="button" value="익명함수를 가지고 있는  변수 sum02를 sum2() Call" onclick="sum02()"/>
+    <br/><br/><br/>
+  
+</body>
+
+</html>

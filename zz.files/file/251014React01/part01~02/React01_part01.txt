@@ -1,0 +1,55 @@
+
+===========================
+npm install -g create-react-app
+
+---------------------------------------------------------------
+-->  필요시 NPM update ------------------------------
+=> npm install -g npm@11.5.2    :==> to update
+=> npm -v
+---------------------------------------------------------------
+
+create-react-app -V
+
+
+
+===========================
+cd c:\
+
+md workspaceReact
+cd workspaceReact
+
+md 00react-app
+cd 00react-app
+create-react-app .
+
+dir
+
+
+
+===========================
+npm start
+==> Browser 확인됨 : 즐겨찾기
+
+
+
+
+===========================
+code.visualstudio.com
+
+==> extension install.
+ES Lint      
+:Publisher:   Microsoft
+
+//==> Reactjs code snippets    
+:Publisher:   xabikos : 이전에 많이 씀.
+
+//==> ES7+ React/Redux/React-Native snippets    
+:Publisher:   dsznajder) : 요즘 많이 선택 한다 함.
+
+prettir-code formatter    
+:Publisher:   Prettier
+
+
+==> Panel 에서
+npm start : 권한 및 실행 환경 문제 발생시.
+cmd /c npm start

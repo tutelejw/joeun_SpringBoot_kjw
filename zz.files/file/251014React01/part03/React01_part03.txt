@@ -1,0 +1,27 @@
+
+===========================
+==> Deployment 
+
+==> C:\workspaceReact\00react-app  로 이동
+
+cd  C:\workspaceReact\00react-app
+
+dir     ==> build 폴더 없는 것 확인
+
+npm run build
+==> cosole 내용 읽어 보고...
+
+dir    ==> build 폴서 생성된 것 확인
+
+
+[ 하나 ] : Tomcat WebServer 에 Deploy
+==> build 폴더 내부 내용 Copy
+==> Tomcat_Home/ webapps / ROOT  Paste
+==> Browser 확인. ==> http://127.0.0.1:8080
+
+[ 두울 ] : Apache WebServer 에 Deploy
+==> build 폴더 내부 내용 Copy
+==> apache_Home / htdocs  Paste
+==> Browser 확인. ==> http://127.0.0.1:80
+
+===========================
