@@ -1,0 +1,87 @@
+===========================
+cd c:\workspaceReact
+
+md react-myweb02
+cd react-myweb02
+
+create-react-app .
+
+dir
+
+npm start
+==> 브라우저 확인 
+==> http://ip:3000
+
+
+
+
+============================
+==> 필요 모듈, lib 설치
+npm install axios 
+npm install jquery
+npm install react-router-dom@5
+npm install react-bootstrap
+npm install bootstrap
+
+
+
+
+======================================
+VSCode 실행후 package.json 각각의 모듈 설치 확인.
+======================================
+
+
+
+
+======================================
+==> jquery / bootstrap 사용은...
+======================================
+==>{
+==>   /* The following line can be included in your src/index.js or App.js file */
+==>}
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+==> jquery 사용은....
+import $ from 'jquery'
+======================================
+
+
+
+
+======================================
+1. index.html  : 한글관련 수정
+		: <html lang="ko">
+
+
+2. indes.js : 주석처리 및 라우터 컴퍼넌트 처리
+    : // <React.StrictMode>  
+		: <BrowserRouter>
+
+
+3. App.css : 아래 추가
+
+/*===== 아래의 내용 추가 =====*/
+.ViewGood{
+  border: 1px solid red;
+  margin: 1px;
+  padding: 1px;  
+}
+/*=========================*/
+
+
+4. app.js : 추가 및 변경
+		: 추가 
+		import 'bootstrap/dist/css/bootstrap.min.css'
+
+		: 변경
+	<div className="ViewGood"> 
+      <center>Ready</center> 
+    </div>
+
+
+npm start  OR cmd /c npm start
+==> 브라우저 확인 
+==> http://ip:3000   
+
+//==> 상태유지 session / cookie 사용함 
+//==> http://127.0.0.1:3000 사용 실습  : 일관성

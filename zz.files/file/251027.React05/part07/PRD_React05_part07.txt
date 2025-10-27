@@ -1,0 +1,120 @@
+=================================================
+PRD : Product Requirement Document : 제품요구서 작성 : ???
+--------------------------------------------------
+-- 용어에 익숙해지자 
+: 구현요구사항을 AI 에 전달 하는 skill 을 익힘.
+: 요구사항을 정확히 지시 : Prompt Detail
+: 직접 지시가 아니라 AI 와 협업 
+   예> 이렇게 하려면 어떻게 해야해 ? 
+         : 난 알고 있지만. AI 가 생각하고 해결 할 수 있도록
+
+: Low-code / Prompt Engineering / Ai-assisted coding
+=================================================
+
+
+
+### Prompt > React Component 구현
+
+#  선행 조건  
+##. 구현된 폴더 및 컴포넌트는 유지함.
+## 사용 Lib.
+"axios": "^1.11.0",
+"bootstrap": "^5.3.8",
+"jquery": "^3.7.1",
+"react-bootstrap": "^2.10.10",
+"react-router-dom": "^5.3.4",
+
+
+# 아래의 규칙 으로 구성해 주세요.
+1. Folder Name
+2. React Component File Name
+
+3. 1.에 제시된 폴더에 2.의 Componet 구현
+3.1 root element 는 :  <div className="ViewGood"> 로 구현
+3.2 "[ React Component File Name] 컴포넌트시작"  로그 출력 구현
+3.3 "[ React Component File Name ] 화면 준비중"  화면표시
+
+4. 구현된 폴더, 컼포넌트  파일 압축파일로 제공
+5. 또한 화면에 폴더구조 보여주고. 구현된 파일도 보여줄것.
+
+6. 1~5 번 공통사항임.
+
+7. 자세한 구현 내용은 각각의 컴포넌트 [ 구현내용 ] 참조
+7.1 [구현 내용] 있을시 공통사항의 3.3 생략
+
+
+================================================
+1. src
+2. 01App.js
+
+
+[구현내용 ]
+
+구현 1> 
+: 01UserPage 는 UserPage 임포트
+: 01MainPage 는 MainPage 임포트
+: 01LoginPage 는 LoginPage 임포트
+: NotFound 는 NotFound 임포트
+
+: <Swtich>  로 아래 라우팅
+:: uri 가 / 이면 <MainPage />
+:: uri 가 /user <UserPage>
+:: uri 가 /login 이면 <LoginPage />
+:: uri 가 * 이면 <NotFound />
+
+
+
+=================================================
+1. src / components / common 
+2. 01Header.js
+
+
+[구현내용 ]
+
+구현 1> 아래의 uri  <Link > 구현
+/
+/user
+/login
+
+참조 > 01App.js 참조
+
+
+
+=================================================
+1. src / components / login /  
+2. 01LoginForm.js
+
+[ 구현내용 ]
+
+구현 1> 
+: form tag 를 용 userId, password 입력 받고 
+  submit  하는 화면 구성해주세요.
+: 화면은 부라우저의 중앙에 놓이게 함.
+: style, css , event 불필요. 단순한 화면 구성
+
+
+=================================================
+1. src / pages /
+2. 01logonPage.js
+
+[ 구현내용 ]
+
+구현 1>
+: 01LoginForm 을 LoginForm 으로 임포트
+: LoginForm 화면 구성
+
+
+
+=================================================
+1. src / pages /
+2. 01MainPage.js
+
+[ 구현내용 ]
+
+구현 1>
+: Main01 , Main02 , Footer 임포트
+: 01Header는 Header 로 임포트
+: 컴포넌트 구성
+:: 상단 Header 
+:: 하단 Footer
+:: 중앙은 3:9 비율로 Main01 / Main02 

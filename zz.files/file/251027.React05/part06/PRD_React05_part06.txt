@@ -1,0 +1,58 @@
+=================================================
+PRD : Product Requirement Document : 제품요구서 작성 : ???
+--------------------------------------------------
+-- 용어에 익숙해지자 
+: 구현요구사항을 AI 에 전달 하는 skill 을 익힘.
+: 요구사항을 정확히 지시 : Prompt Detail
+: 직접 지시가 아니라 AI 와 협업 
+   예> 이렇게 하려면 어떻게 해야해 ? 
+         : 난 알고 있지만. AI 가 생각하고 해결 할 수 있도록
+
+: Low-code / Prompt Engineering / Ai-assisted coding
+=================================================
+
+
+### Prompt > React Component 구현
+
+# 아래의 규칙 으로 구성해 수세요.
+1. Folder Name
+2. React Component File Name.
+3. 1.에 제시된 폴더에 2.의 Componet 구현
+: root element 는 :  <div className="ViewGood"> 로 구현
+: "[ React Component File Name] 컴포넌트시작"  로그 출력 구현
+: "[ React Component File Name ] 화면 준비중"  화면표시
+4. 구현된 폴더, 컼포넌트  파일 압축파일로 제공
+5. 또한 화면에 폴더구조 보여주고. 구현된 파일도 보여줄것.
+
+
+
+================================================
+1. src / components / main
+2. Main01.js
+2. Main02.js
+2. Main03.js
+
+=================================================
+1. src / components / login
+2. LgoinForm.js
+
+=================================================
+1. src / components / user
+2. UserInfo.js
+2. UserList.js
+2. UserListItem.js
+2. AddUser.js
+2. UpdateUser.js
+
+=================================================
+1. src / components / common
+2. Header.js
+2. Footer.js
+2. NotFound.js
+
+
+=================================================
+1. src / components / pages
+2. LgoinPage.js
+2. MainPage.js
+2. UserPage.js
