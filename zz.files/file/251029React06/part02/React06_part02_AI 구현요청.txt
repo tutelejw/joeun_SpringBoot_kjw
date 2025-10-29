@@ -1,0 +1,238 @@
+
+0. ctrl + alt + i : Ask Copilot  또는 ChatGPT 사용
+
+=======================================================
+질문
+=======================================================
+
+1. DTO 인 User.java 와 대응하는 JSON Data user 를 이용
+2. 회원가입정보 입력 받아.
+3. userService 이용 회원가입하는 AddUser.js 
+만들어주세요.
+
+
+====================================
+답변...
+====================================
+// src/components/user/AddUser.js
+import React, { useState } from 'react';
+import userService from '../../services/userService';
+
+const AddUser = () => {
+  const [user, setUser] = useState({
+    userId: '',
+    userName: '',
+    password: '',
+    age: '',
+    grade: '',
+    active: true
+  });
+
+  const [result, setResult] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser({
+      ...user,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const addedUser = await userService.addUser(user);
+      setResult(addedUser);
+      alert('회원가입 성공!');
+    } catch (err) {
+      console.error('회원가입 실패:', err);
+      alert('회원가입 실패');
+    }
+  };
+
+  return (
+    <div>
+      <h2>회원가입</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>ID:</label>
+          <input type="text" name="userId" value={user.userId} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>이름:</label>
+          <input type="text" name="userName" value={user.userName} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>비밀번호:</label>
+          <input type="password" name="password" value={user.password} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>나이:</label>
+          <input type="number" name="age" value={user.age} onChange={handleChange} />
+        </div>
+        <div>
+          <label>등급:</label>
+          <input type="number" name="grade" value={user.grade} onChange={handleChange} />
+        </div>
+        <button type="submit">가입</button>
+      </form>
+
+      {result && (
+        <div style={{ marginTop: '1rem' }}>
+          <h4>가입된 사용자 정보</h4>
+          <pre>{JSON.stringify(result, null, 2)}</pre>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AddUser;
+
+
+
+
+===============================
+??????????????????
+const [user, setUser] = useState({
+    userId: '',
+    userName: '',
+    password: '',
+    age: '',
+    grade: '',
+    active: true
+  });
+
+
+const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser({
+      ...user,
+      [name]: value
+    });
+  };
+
+구현에서...
+
+    setUser({
+      ...user,
+      [name]: value
+    });
+
+이렇게 하면 기존 user 는 유지되고 새로운  [name]: value 가 추가되는 것 아니가요.
+기존 data 에 덥어 스나요. ??
+
+==> 덥어쓴다함. 대박.....
+===============================
+
+
+
+===============================
+???????????????????.
+const [result, setResult] = useState(null);
+는 필요한가요. 어디에 쓰이나요 ?
+
+
+==> 있어도 없어도 됨.
+===============================
+
+
+
+
+
+=======================================================
+===== 질문
+=======================================================
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser({
+      ...user,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const addedUser = await userService.addUser(user);
+      setResult(addedUser);
+      alert('회원가입 성공!');
+    } catch (err) {
+      console.error('회원가입 실패:', err);
+      alert('회원가입 실패');
+    }
+  };
+
+위의 두 함수는 UserPage.js 에서 컨테이너 컴퍼넌트에서 구현하고.
+프리젠테이션 컴포넌트 addUser.js 에게 props 로 전달 해서 구현 하면.
+어떤가요.
+
+
+=======================================================
+===== 답변
+=======================================================
+import React, { useState } from 'react';
+import AddUser from '../components/user/AddUser';
+import * as userService from '../services/userService';
+
+function UserPage() {
+  const [user, setUser] = useState({
+    userId: '',
+    userName: '',
+    password: '',
+    age: '',
+    grade: '',
+    active: true
+  });
+
+  const [result, setResult] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser({
+      ...user,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const addedUser = await userService.addUser(user);
+      setResult(addedUser);
+      alert('회원가입 성공!');
+    } catch (err) {
+      console.error('회원가입 실패:', err);
+      alert('회원가입 실패');
+    }
+  };
+
+  return (
+    <div>
+      <h2>회원 가입</h2>
+      <AddUser user={user} onChange={handleChange} onSubmit={handleSubmit} />
+    </div>
+  );
+}
+
+export default UserPage;
+
+
+
+import React from 'react';
+
+function AddUser({ user, onChange, onSubmit }) {
+  return (
+    <form onSubmit={onSubmit}>
+      <input type="text" name="userId" value={user.userId} onChange={onChange} placeholder="아이디" />
+      <input type="text" name="userName" value={user.userName} onChange={onChange} placeholder="이름" />
+      <input type="password" name="password" value={user.password} onChange={onChange} placeholder="비밀번호" />
+      <input type="number" name="age" value={user.age} onChange={onChange} placeholder="나이" />
+      <input type="number" name="grade" value={user.grade} onChange={onChange} placeholder="등급" />
+      <button type="submit">가입하기</button>
+    </form>
+  );
+}
+
+export default AddUser;
+=================================================================================

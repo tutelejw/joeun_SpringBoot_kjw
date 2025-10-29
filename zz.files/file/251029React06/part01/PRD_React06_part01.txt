@@ -1,0 +1,58 @@
+=================================================
+PRD : Product Requirement Document : 제품요구서 작성 : ???
+--------------------------------------------------
+-- 용어에 익숙해지자 
+: 구현요구사항을 AI 에 전달 하는 skill 을 익힘.
+: 요구사항을 정확히 지시 : Prompt Detail
+: 직접 지시가 아니라 AI 와 협업 
+   예> 이렇게 하려면 어떻게 해야해 ? 
+         : 난 알고 있지만. AI 가 생각하고 해결 할 수 있도록
+
+: Low-code / Prompt Engineering / Ai-assisted coding
+=================================================
+
+
+
+### Prompt >  JSON 표현
+
+public class User {
+	
+	///Field
+	private String userId;
+	private String userName;
+	private String password;
+	private String role;
+	private String ssn;
+	private String phone;
+	private String addr;
+	private String email;
+	private Date regDate;
+	/////////////// EL 적용 위해 추가된 Field ///////////
+	private String phone1;
+	private String phone2;
+	private String phone3;
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	// JSON ==> Domain Object  Binding을 위해 추가된 부분
+	private String regDateString;
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>
+>> 답변
+>>>>>>>>>>>>>>>>>>>>>>>>
+
+{
+  "userId": "testuser01",
+  "userName": "홍길동",
+  "password": "password123",
+  "role": "user",
+  "ssn": "900101-1234567",
+  "phone": "010-1234-5678",
+  "addr": "서울시 강남구 역삼동",
+  "email": "testuser01@example.com",
+  "regDate": "2025-09-17T10:30:00",
+  "phone1": "010",
+  "phone2": "1234",
+  "phone3": "5678",
+  "regDateString": "2025-09-17"
+}

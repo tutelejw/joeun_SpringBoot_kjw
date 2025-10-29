@@ -1,0 +1,157 @@
+=================================================
+PRD : Product Requirement Document : 제품요구서 작성 : ???
+--------------------------------------------------
+-- 용어에 익숙해지자 
+: 구현요구사항을 AI 에 전달 하는 skill 을 익힘.
+: 요구사항을 정확히 지시 : Prompt Detail
+: 직접 지시가 아니라 AI 와 협업 
+   예> 이렇게 하려면 어떻게 해야해 ? 
+         : 난 알고 있지만. AI 가 생각하고 해결 할 수 있도록
+
+: Low-code / Prompt Engineering / Ai-assisted coding
+=================================================
+
+
+
+#####################################################
+### Prompt > React Component 구현
+
+#  선행 조건  
+##. 구현된 폴더 및 컴포넌트는 유지함.
+## 사용 Lib.
+"axios": "^1.11.0",
+"bootstrap": "^5.3.8",
+"jquery": "^3.7.1",
+"react-bootstrap": "^2.10.10",
+"react-router-dom": "^5.3.4",
+
+
+# 아래의 규칙 으로 구성해 주세요.
+1. Folder Name
+2. React Component File Name
+
+3. "bootstrap": "^5.3.5", 사용
+4. css 직접 다루는 것은 최소화  / 사용 않하고 어쩔수 없을때 사용.
+5. 디자인은 심플하고 깔끔하게.
+6. 화면에 보여지는 부분만 깔금하게 수정구현, 나머지는 코드는 수정하지 말것
+
+7. 또한 화면에 폴더구조 보여주고. 구현된 파일도 보여줄것.
+
+
+====================================================
+1. src / components / login
+2. 07LoginForm.js
+2. 07Logout.js
+
+아래 소스를 참조하여 위 구현.
+02LoginForm.js
+02Logout.js
+
+
+
+====================================================
+1. src / components / pages
+2. 07LoginPage.js
+
+아래 소스를 참조하여 위 구현.
+02LoginPage.js
+
+
+
+
+#####################################################
+### Prompt > React Component 구현
+
+#  선행 조건  
+##. 구현된 폴더 및 컴포넌트는 유지함.
+## 사용 Lib.
+"axios": "^1.11.0",
+"bootstrap": "^5.3.8",
+"jquery": "^3.7.1",
+"react-bootstrap": "^2.10.10",
+"react-router-dom": "^5.3.4",
+
+
+# 아래의 규칙 으로 구성해 주세요.
+1. Folder Name
+2. React Component File Name
+
+3. "bootstrap": "^5.3.5", 사용
+4. css 직접 다루는 것은 최소화  / 사용 않하고 어쩔수 없을때 사용.
+5. 디자인은 심플하고 깔끔하게.
+6. 화면에 보여지는 부분만 깔금하게 수정구현, 나머지는 코드는 수정하지 말것
+
+7. 또한 화면에 폴더구조 보여주고. 구현된 파일도 보여줄것.
+
+
+====================================================
+1. src / components / common
+2. 07Header.js
+2. 07Footer.js
+
+아래 소스를 참조하여 위 구현.
+02Header.js
+Footer.js
+
+
+
+====================================================
+1. src / pages 
+2. 07MainPage.js
+
+아래 소스를 참조하여 위 구현.
+02MainPage.js
+
+
+
+
+
+
+#####################################################
+### Prompt > React Component 구현
+
+#  선행 조건  
+##. 구현된 폴더 및 컴포넌트는 유지함.
+## 사용 Lib.
+"axios": "^1.11.0",
+"bootstrap": "^5.3.8",
+"jquery": "^3.7.1",
+"react-bootstrap": "^2.10.10",
+"react-router-dom": "^5.3.4",
+
+
+# 아래의 규칙 으로 구성해 주세요.
+1. Folder Name
+2. React Component File Name
+
+3. "bootstrap": "^5.3.5", 사용
+4. css 직접 다루는 것은 최소화  / 사용 않하고 어쩔수 없을때 사용.
+5. 디자인은 심플하고 깔끔하게.
+6. 화면에 보여지는 부분만 깔금하게 수정구현, 나머지는 코드는 수정하지 말것
+
+7. 또한 화면에 폴더구조 보여주고. 구현된 파일도 보여줄것.
+
+
+====================================================
+1. src / components / user
+2. 07UserInfo.js
+2. 07AddUser.js  
+2. 07UpdateUser.js
+2. 07UserList.js
+2. 07UserListItem.js
+
+아래 소스를 참조하여 위 구현.
+03.UserInfo.js
+04.AddUser.js
+05.UpdateUser.js
+06.UserList.js
+06.UserListItem.js
+
+
+
+====================================================
+1. src / components / pages
+2. 07UserPage.js
+
+아래 소스를 참조하여 위 구현.
+06UserPage.js
