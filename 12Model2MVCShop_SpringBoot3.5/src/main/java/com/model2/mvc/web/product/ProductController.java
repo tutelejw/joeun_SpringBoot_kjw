@@ -1,10 +1,9 @@
 package com.model2.mvc.web.product;
 
-import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,17 +14,22 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
 
+//======================== 추가, 변경된 부분  ==========================/
+//==> Spring Boot 시 추가된 부분. : Spring Boot 3.x : Tomcat 10 사용
+//======================== 추가, 변경된 부분  ==========================/
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+
 //==> 회원관리 Controller
 @Controller
-//@RequestMapping("/product/*")
-@RequestMapping("/product")
+@RequestMapping("/product/*")
+//@RequestMapping("/product")
 public class ProductController {
 
 	/// Field
@@ -41,10 +45,14 @@ public class ProductController {
 	// ==> classpath:config/common.properties , classpath:config/commonservice.xml
 	// 참조 할것
 	// ==> 아래의 두개를 주석을 풀어 의미를 확인 할것
-	@Value("#{commonProperties['pageUnit']}") // @Value("#{commonProperties['pageUnit'] ?: 3}")
+//	@Value("#{commonProperties['pageUnit']}") // @Value("#{commonProperties['pageUnit'] ?: 3}")
+//	int pageUnit;
+//
+//	@Value("#{commonProperties['pageSize']}") // @Value("#{commonProperties['pageSize'] ?: 2}")
+//	int pageSize;
+	@Value("${pageUnit}")
 	int pageUnit;
-
-	@Value("#{commonProperties['pageSize']}") // @Value("#{commonProperties['pageSize'] ?: 2}")
+	@Value("${pageSize}")
 	int pageSize;
 
 	// @RequestMapping("/addProductView.do")

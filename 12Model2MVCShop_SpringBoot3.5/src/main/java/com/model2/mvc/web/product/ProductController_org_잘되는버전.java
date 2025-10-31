@@ -3,8 +3,8 @@ package com.model2.mvc.web.product;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,6 +20,12 @@ import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
+
+//======================== 추가, 변경된 부분  ==========================/
+//==> Spring Boot 시 추가된 부분. : Spring Boot 3.x : Tomcat 10 사용
+//======================== 추가, 변경된 부분  ==========================/
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 
 //==> 회원관리 Controller
 //@Controller
