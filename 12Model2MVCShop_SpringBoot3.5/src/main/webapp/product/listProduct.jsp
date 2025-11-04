@@ -1,5 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!DOCTYPE html>
+
 <%-- 로그 찍기: JSTL core 태그를 이용한 디버깅 --%>
 <c:if test="${!empty list}">
     <div style="color:red;">[디버깅] list 에 데이터가 정상 있습니다.</div>
@@ -13,24 +17,7 @@
 <c:if test="${empty search}">
     <div style="color:red;">[디버깅] search가 비어 있습니다.</div>
 </c:if>
-<%-- /////////////////////// EL / JSTL 적용으로 주석 처리 ////////////////////////
 
-<%@ page import="java.util.List"  %>
-
-<%@ page import="com.model2.mvc.service.domain.Product" %>
-<%@ page import="com.model2.mvc.common.Search" %>
-<%@page import="com.model2.mvc.common.Page"%>
-<%@page import="com.model2.mvc.common.util.CommonUtil"%>
-
-<%
-	List<Product> list= (List<Product>)request.getAttribute("list");
-	Page resultPage=(Page)request.getAttribute("resultPage");
-	
-	Search search = (Search)request.getAttribute("search");
-	//==> null 을 ""(nullString)으로 변경
-	String searchCondition = CommonUtil.null2str(search.getSearchCondition());
-	String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
-%> 	/////////////////////// EL / JSTL 적용으로 주석 처리 //////////////////////// --%>
 <%
 String uri = request.getRequestURI();
 String url = request.getRequestURL().toString();
@@ -43,8 +30,33 @@ System.out.println("[로그] 쿼리스트링: " + query);
 System.out.println("[로그] 요청 방식: " + method);
 %>
 
-<html>
+<html lang="ko">
 <head>
+	<meta charset="UTF-8">
+	
+	<!-- 참조 : http://getbootstrap.com/css/   참조 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	
+	<!-- Bootstrap Dropdown Hover CSS -->
+   <link href="/css/animate.min.css" rel="stylesheet">
+   <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+   
+    <!-- Bootstrap Dropdown Hover JS -->
+   <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
+	
+	<!--  ///////////////////////// CSS ////////////////////////// -->
+	<style>
+ 		body {
+            padding-top : 50px;
+        }
+     </style>
+     
 <c:set var="menuParam" value="${param.menu}" />
 <c:set var="title" value="상품 목록 조회" />
 
@@ -96,8 +108,14 @@ System.out.println("[로그] 요청 방식: " + method);
 
 </head>
 
-<body bgcolor="#ffffff" text="#000000">
+<!-- <body bgcolor="#ffffff" text="#000000"> -->
+<body>
 
+	<!-- ToolBar Start /////////////////////////////////////-->
+	<jsp:include page="/layout/toolbar.jsp" />
+   	<!-- ToolBar End /////////////////////////////////////-->
+	
+	<!--  화면구성 div Start /////////////////////////////////////-->
 <div style="width:98%; margin-left:10px;">
 
 <form name="detailForm" action="${pageContext.request.contextPath}/product/listProduct" method="post">
@@ -125,14 +143,10 @@ System.out.println("[로그] 요청 방식: " + method);
 	<tr>
 		<td align="right">
 			<select name="searchCondition" class="ct_input_g" style="width:80px">
-			<%-- /////////////////////// EL / JSTL 적용으로 주석 처리 ////////////////////////
-				<option value="0" <%= (searchCondition.equals("0") ? "selected" : "")%>>회원ID</option>
-				<option value="1" <%= (searchCondition.equals("1") ? "selected" : "")%>>회원명</option>
-				/////////////////////// EL / JSTL 적용으로 주석 처리 //////////////////////// --%>
+				<!-- /////////////////////// EL / JSTL 적용으로 주석 처리 //////////////////////// -->
 				<option value="0"  ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>상품NO</option>
 				<option value="1"  ${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>상품명</option>
 			</select>
-			<%--<input type="text" name="searchKeyword" value="<%= searchKeyword %>"  class="ct_input_g" style="width:200px; height:14px" >--%>
 			<input type="text" id="searchKeyword" name="searchKeyword"  
 						value="${! empty search.searchKeyword ? search.searchKeyword : ""}"  
 						class="ct_input_g" style="width:200px; height:20px" > 
