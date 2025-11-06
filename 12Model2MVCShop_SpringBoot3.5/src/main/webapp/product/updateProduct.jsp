@@ -14,7 +14,7 @@
 <head>
 <title>상품 정보 수정</title>
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
+<!-- <link rel="stylesheet" href="/css/admin.css" type="text/css"> -->
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
