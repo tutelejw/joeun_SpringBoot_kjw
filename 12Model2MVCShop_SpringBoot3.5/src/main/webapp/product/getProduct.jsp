@@ -60,7 +60,14 @@ System.out.println("[로그] 요청 방식: " + method);
 </script>
 </head>
 
-<body bgcolor="#ffffff" text="#000000">
+<!-- <body bgcolor="#ffffff" text="#000000"> -->
+<body>
+
+	<!-- ToolBar Start /////////////////////////////////////-->
+	<jsp:include page="/layout/toolbar.jsp" />
+   	<!-- ToolBar End /////////////////////////////////////-->
+	
+	<!--  화면구성 div Start /////////////////////////////////////-->
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
