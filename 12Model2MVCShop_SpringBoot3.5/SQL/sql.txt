@@ -1,4 +1,3 @@
-update product set image_file='123.png';
 
 
 
@@ -22,3 +21,4 @@ SET AUTOCOMMIT ON;
 
 select * from product;
 
+update product set image_file='123.png';
