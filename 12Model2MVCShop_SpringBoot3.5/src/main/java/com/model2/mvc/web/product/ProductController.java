@@ -1,6 +1,11 @@
 package com.model2.mvc.web.product;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 //import javax.servlet.http.HttpServletRequest;
 //import javax.servlet.http.HttpSession;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
@@ -132,8 +138,10 @@ public class ProductController {
 	@RequestMapping(value = "updateProduct", method = RequestMethod.GET)
 	public String updateProduct(int prodNo, Model model, HttpSession session) throws Exception {
 
+		// 수정 페이지 정보 조회
 		System.out.println("/product/updateProduct");
-		// Business Logic
+		System.out.println("/product/updateProduct int prodNo, Model model, HttpSession session ");
+		// Business Logic  
 		Product product = productService.getProduct(prodNo);
 		// Model 과 View 연결
 		model.addAttribute("product", product);
@@ -142,25 +150,82 @@ public class ProductController {
 		return "forward:/product/updateProduct.jsp";
 	}
 
-	// @RequestMapping("/updateProduct.do")
+//	// @RequestMapping("/updateProduct.do")
+//	@RequestMapping(value = "updateProduct", method = RequestMethod.POST)
+//	public String updateProduct(@ModelAttribute("product") Product product, Model model, HttpSession session)
+//			throws Exception {
+//		// 수정 요청
+//		System.out.println("/product/updateProduct");
+//		System.out.println("/product/updateProduct @ModelAttribute(\"product\") Product product, Model model, HttpSession session");
+//		// Business Logic
+//		productService.updateProduct(product);
+//
+//		// String
+//		// sessionId=String.valueOf(((Product)session.getAttribute("product")).getProdNo());
+//		int sessionId = ((Product) session.getAttribute("product")).getProdNo();
+////		if(sessionId.equals(product.getProdNo())){
+//		if (sessionId == product.getProdNo()) {
+//			session.setAttribute("product", product);
+//		}
+//
+//		return "redirect:/product/getProduct?prodNo=" + product.getProdNo();
+//	}
+	
 	@RequestMapping(value = "updateProduct", method = RequestMethod.POST)
-	public String updateProduct(@ModelAttribute("product") Product product, Model model, HttpSession session)
-			throws Exception {
+	public String updateProduct(
+	        @ModelAttribute("product") Product product,
+	        @RequestParam("fileName") MultipartFile uploadFile,
+	        Model model, HttpSession session) throws Exception {
 
-		System.out.println("/product/updateProduct");
-		// Business Logic
-		productService.updateProduct(product);
+	    if (!uploadFile.isEmpty()) {
+	        String uploadDir = "src/main/resources/static/images";  // 업로드 경로
+	        File uploadDirFile = new File(uploadDir);
 
-		// String
-		// sessionId=String.valueOf(((Product)session.getAttribute("product")).getProdNo());
-		int sessionId = ((Product) session.getAttribute("product")).getProdNo();
-//		if(sessionId.equals(product.getProdNo())){
-		if (sessionId == product.getProdNo()) {
-			session.setAttribute("product", product);
-		}
+	        // 폴더가 없으면 생성
+	        if (!uploadDirFile.exists()) {
+	            boolean created = uploadDirFile.mkdirs();
+	            System.out.println("Upload directory created: " + created);
+	        }
 
-		return "redirect:/product/getProduct?prodNo=" + product.getProdNo();
+	        // 저장할 파일명 생성 (UUID + 원본파일명)
+	        String savedFileName = UUID.randomUUID().toString() + "_" + uploadFile.getOriginalFilename();
+	        File dest = new File(uploadDirFile, savedFileName);
+
+	        // 파일 저장
+	        uploadFile.transferTo(dest);
+	        System.out.println("File saved to: " + dest.getAbsolutePath());
+
+	        // 현재 시간 포맷팅
+	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	        String nowStr = sdf.format(new Date());
+
+	        // 로그용 텍스트 파일 생성 및 기록(append)
+	        File logFile = new File(uploadDirFile, "upload_log.txt");
+	        try (FileWriter fw = new FileWriter(logFile, true)) {
+	            fw.write("Uploaded file: " + savedFileName + " at " + nowStr + "\n");
+	        }
+
+	        // 도메인 객체에 파일명 저장
+	        product.setFileName(savedFileName);
+	    } else {
+	        System.out.println("No file uploaded.");
+	    }
+
+	    productService.updateProduct(product);
+
+	    int sessionId = ((Product) session.getAttribute("product")).getProdNo();
+	    if (sessionId == product.getProdNo()) {
+	        session.setAttribute("product", product);
+	    }
+
+	    return "redirect:/product/getProduct?prodNo=" + product.getProdNo();
 	}
+
+
+
+
+
+
 
 //	@RequestMapping("/listProduct.do")
 	@RequestMapping(value = "listProduct")

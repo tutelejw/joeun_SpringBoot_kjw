@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!--  Layout Definition 
+		:: LinearLayout : 순서대로 Child View(Content) 배치 
+		:: android:layouy_xxx : parentView 가 View( 나를 ?) 를 어떻게배치 
+		:: android:xxx  : content 를 어떻게 배치 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+	
+    <!-- 1.	android:layouy_xxx : parentView 가 View 를 어떻게배치 
+    			기본 Test : match_parent  -->
+    <TextView
+		android:layout_width="match_parent" 
+		android:layout_height="match_parent" 
+		android:background="#800000ff"
+		android:textColor="#ffffff"
+		android:textSize="20sp"
+		android:text="View 를 잘(?) 배치"/>
+		
+    <!-- 2.1 	android:layouy_xxx : parentView 가 View 를 어떻게배치 
+    				기본 Test  : wrap_content
+    <TextView
+		android:layout_width="wrap_content" 
+		android:layout_height="match_parent" 
+		android:background="#800000ff"
+		android:textColor="#ffffff"
+		android:textSize="20sp"
+		android:text="View 를 잘(?) 배치"/> -->
+    
+    <!-- 2.2	android:layouy_xxx : parentView 가 View 를 어떻게배치  
+    				기본 Test  : wrap_content
+    <TextView
+		android:layout_width="match_parent" 
+		android:layout_height="wrap_content" 
+		android:background="#800000ff"
+		android:textColor="#ffffff"
+		android:textSize="20sp"
+		android:text="View 를 잘(?) 배치"/>-->
+    
+    <!-- 2.3	android:layouy_xxx : parentView 가 View 를 어떻게배치  
+    				기본 Test  : wrap_content
+    <TextView
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:background="#800000ff"
+		android:textColor="#ffffff"
+		android:textSize="20sp"
+		android:text="View 를 잘(?) 배치"/> 	-->
+		
+	<!-- 3.1 기본 gravity  : content 관련 
+    		 		| 연산자 사용가능
+    				"center"    				"bottom|center"
+    				"center_vertical"  	"center_vertical|center" 등
+    		
+    		:: 3.1 / 3.2 의 차이 이해
+			- android:layouy_xxx : parentView 가 View( 나를 ?) 를 어떻게배치 
+			- android:xxx  : content 를 어떻게 배치
+    <TextView
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:background="#800000ff"
+		android:textColor="#ffffff"
+		android:textSize="20sp"
+		android:gravity="center"
+		android:text="View 를 잘(?) 배치"/>   -->
+		
+	<!-- 3.2 gravity  : content 관련 
+	
+			:: 3.1 / 3.2 의 차이 이해
+			- android:layouy_xxx : parentView 가 View( 나를 ?) 를 어떻게배치 
+			- android:xxx  : content 를 어떻게 배치
+    <TextView
+		android:layout_width="match_parent" 
+		android:layout_height="match_parent"
+		android:background="#800000ff"
+		android:textColor="#ffffff"
+		android:textSize="20sp"
+		android:gravity="center"
+		android:text="View 를 잘(?) 배치"/>  -->
+		
+	<!-- 4.1 layout_gravity  : View 관련 
+	
+			:: 4.1 / 4.2 / 4.3 차이 이해
+				- android:layouy_xxx : parentView 가 View( 나를 ?) 를 어떻게배치 
+				- android:xxx  : content 를 어떻게 배치
+    <TextView
+		android:layout_width="match_parent" 
+		android:layout_height="match_parent"
+		android:background="#800000ff"
+		android:textColor="#ffffff"
+		android:textSize="20sp"
+		android:layout_gravity="center"
+		android:text="View 를 잘(?) 배치"/>  -->
+
+	<!-- 4.2  layout_gravity  : View 관련 
+	
+			:: 4.1 / 4.2 / 4.3 차이 이해
+				- android:layouy_xxx : parentView 가 View( 나를 ?) 를 어떻게배치 
+				- android:xxx  : content 를 어떻게 배치
+    <TextView
+		android:layout_width="wrap_content" 
+		android:layout_height="match_parent"
+		android:background="#800000ff"
+		android:textColor="#ffffff"
+		android:textSize="20sp"
+		android:layout_gravity="center"
+		android:text="View 를 잘(?) 배치"/>-->
+    
+    <!-- 4.3 layout_gravity  : View 관련 
+	
+			:: 4.1 / 4.2 / 4.3 차이 이해
+				- android:layouy_xxx : parentView 가 View( 나를 ?) 를 어떻게배치 
+				- android:xxx  : content 를 어떻게 배치  
+
+			:: Row Center 로 배치되지 않는 이유 
+				- LinearLayout 은 순서대로 배치
+				- 모든 attribute(속성)은 단독효과 와 다른 속성과 서로 영향을 미친다
+    <TextView
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:background="#800000ff"
+		android:textColor="#ffffff"
+		android:textSize="20sp"
+		android:layout_gravity="center"
+		android:text="View 를 잘(?) 배치"/>  -->
+    
+    <!-- 5.  4.3 을 Row Center 에 배치하고 싶다면..
+    			:: layout 의 Content(child View) 를 중앙에 배치하기
+    		
+    			- android:layouy_xxx : parentView 가 View( 나를 ?) 를 어떻게배치 
+				- android:xxx  : content 를 어떻게 배치  
+    		
+    		   android:gravity="center" 를  LinearLayout element 에 추가해 보면
+	<TextView
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:background="#800000ff"
+		android:textColor="#ffffff"
+		android:textSize="20sp"
+		android:text="View 를 잘(?) 배치"/>-->
+		
+	<!-- 6. 홍길동 , 홍길순 배치 
+			- android:layouy_xxx : parentView 가 View( 나를 ?) 를 어떻게배치 
+			- android:xxx  : content 를 어떻게 배치
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="#80ffff00"
+		android:textColor="#ffffff"
+		android:textSize="40sp"
+		android:text="홍길동"/> 
+		
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="#ffff00"
+		android:textColor="#ffffff"
+		android:textSize="40sp"
+		android:layout_gravity="right"
+		android:text="홍길순"/> -->
+		
+	<!-- 7. 홍길동 , 홍길순 배치  
+			- android:layouy_xxx : parentView 가 View( 나를 ?) 를 어떻게배치 
+			- android:xxx  : content 를 어떻게 배치
+	<TextView
+	    android:layout_width="200dp"
+	    android:layout_height="100dp"
+		android:background="#800054ec"
+		android:textColor="#ffffff"
+		android:textSize="40sp"
+		android:gravity="center_horizontal|center_vertical"
+		android:text="홍길동"/> -->
+
+	<!-- android:gravity="center" 와 동일
+		
+	<TextView
+	    android:layout_width="200dp"
+	    android:layout_height="100dp"
+		android:background="#0054ec"
+		android:textColor="#ffffff"
+		android:textSize="40sp"
+		android:gravity="top|right"
+		android:text="홍길순"/> -->
+		
+</LinearLayout>

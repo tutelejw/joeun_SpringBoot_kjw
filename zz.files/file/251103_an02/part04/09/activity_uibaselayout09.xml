@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Layout Definition : RelativeLayout -->
+<RelativeLayout		xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="#ece9d8">
+	
+    <!-- View Definition -->
+    <TextView
+        android:id="@+id/textview"
+         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="문자출력 View" />
+    
+    <EditText 
+        android:id="@+id/edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"  
+        android:layout_below="@+id/textview"
+        android:text="문자입력 View" />
+    
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"  
+        android:layout_below="@+id/edittext"
+         android:text="체크박스뷰" />
+    
+    <RadioGroup 
+        android:id="@+id/radiogroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+         android:layout_centerHorizontal="true"
+        android:layout_below="@+id/checkbox" >
+        
+        <RadioButton 
+            android:id="@+id/radioGroup_radiobutton01"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content" 
+        	android:text="라이오버튼01" />
+        <RadioButton 
+            android:id="@+id/radioGroup_radiobutton02"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"  
+        	android:text="라이오버튼02" />
+	
+	</RadioGroup>    
+    
+    <Spinner 
+        android:id="@+id/spinner"
+       	android:layout_width="match_parent"
+       	android:layout_height="wrap_content" 
+		android:layout_below="@+id/radiogroup"
+		android:entries="@array/spinner_data"/>
+    
+    <DatePicker 
+        android:id="@+id/datepicker"
+       	android:layout_width="wrap_content"
+       	android:layout_height="wrap_content" 
+		android:layout_below="@+id/spinner"/>
+    
+</RelativeLayout>

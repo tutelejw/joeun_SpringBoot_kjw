@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--  Layout Definition 
+		:: RelativeLayout 	: View / View 관계지정 배치
+		 								: View 를 참조할수 있는 Unique id 필요
+										: 기술시 순서가 의미를 갖는다. -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- View Definition -->
+    <!-- android:id="@+id/text_view01"  추가 -->
+    <TextView
+        android:id="@+id/text_view01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        
+        android:paddingTop="20dp"
+        android:paddingLeft="20dp"
+        
+        android:background="#0054ec"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        android:text="레이블뷰/TEST/테스트" />
+    
+     <!-- android:id="@+id/text_view02" 추가
+     		android:layout_below="@+id/text_view01" 추가 -->
+     <TextView
+        android:id="@+id/text_view02"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="50dp"
+
+        android:background="#0054ec"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+
+		android:layout_below="@+id/text_view01"
+         
+        android:text="레이블뷰/TEST/테스트" />
+     
+     
+     <!-- LinearLayout Hierarchy : LinearLayout IS A View
+     		:: Layout 에 View 를 배치할수 있다.
+     		:: View 의 margin / pading을 일괄적으로 적용 
+     		
+     		::android:layout_below="@+id/text_view01" 추가 -->
+ 	<LinearLayout 
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="#000000"
+		android:orientation="vertical"
+		android:layout_margin="30dp"
+		android:layout_below="@+id/text_view02">
+	    
+	    <ImageView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:background="#ece9d8"
+	        
+	        android:layout_margin="20dp"
+	        
+	        android:paddingBottom="10dp"
+	        android:paddingLeft="10dp"
+	        android:paddingRight="10dp"
+	        android:paddingTop="10dp"
+	        
+	        android:src="@drawable/forest" />
+    
+    </LinearLayout>
+
+</RelativeLayout>

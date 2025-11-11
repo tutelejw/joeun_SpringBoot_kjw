@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Messgae 초기화면을 구성한 UI -->
+
+<!-- Layout Definition -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+ 	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+     
+	<LinearLayout 
+	    android:id="@+id/messagelayout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" 
+		android:orientation="vertical">
+	
+	<!-- android:onClick="xmlOnClick"
+			: Button Click 시 호출되는 Method ( 추후 Event 처리시 학습예정 )
+			: 본예제에서는 Button Click 시 호출되는 Method 정도로 이해   -->
+	<Button
+		android:id="@+id/button_newmessage"  
+		android:layout_width="match_parent" 
+		android:layout_height="match_parent" 
+		
+		android:onClick="xmlOnClick"
+		
+		android:text="새 메시지 받기" />
+	
+	</LinearLayout>
+	
+</ScrollView>
+

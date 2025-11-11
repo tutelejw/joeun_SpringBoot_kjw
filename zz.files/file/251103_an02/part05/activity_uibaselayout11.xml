@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Layout Definition : Layout 충첩 및 ETC -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:padding="10dp"
+    android:background="#000000"
+    android:orientation="vertical" >
+    
+    <!-- :: LinnerLayout : 다양한 해성도 문제 극복 / 복잡한 UI 구현은 한계
+           	- android:layout_weight="숫자" 이해
+           	- 0 : 비율에 따른 배치 않고 선언된 layout_width /  layout_height 따른다. 
+           	- 1 이상 : View 와 비율에 따라 배치   	 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="10"
+        android:background="#cccccc"
+        android:gravity="center"
+        android:text="중첩 View 와 ETC ..." />
+
+    <!-- Layout element 중첩 : Layout IS A view : API Hierarchy 확인-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="30" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:gravity="center_vertical|right"
+            android:background="#ff0000"
+            android:text="TextView02" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:gravity="center"
+            android:background="#00ff00"
+            android:text="TextView03" />
+
+    </LinearLayout>
+    
+     <!-- Layout element 중첩 : Layout IS A view : API Hierarchy 확인-->
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="30" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:background="#0000ff"
+            android:text="TextView04" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="60"
+            android:gravity="center"
+            android:background="#ffff00"
+            android:text="TextView05" />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:background="#00ffff"
+            android:gravity="bottom|right"
+            android:text="TextView06" />
+
+    </LinearLayout>
+    
+     <!-- Layout element 중첩 : Layout IS A view : API Hierarchy 확인-->
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="30" 
+        android:background="#ece9d8">
+
+         <Button
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Button01" />
+
+         <Button
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Button02" />
+       
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--  Layout Definition :: LinearLayout : 순서대로 Child View(Content) 배치 
+
+		:: android:baselineAligned  API 확인 ==> true/false 로 변경 실행
+
+		:: attribute 는 단독효과도 갖으며 다른 속성과 서로 영향을 미친다.
+		   ==>   android:orientation="vertical" 일 경우 무시되는 속성 / 당연(?) 	-->
+		   
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" 
+    android:baselineAligned="true">
+    
+	<TextView  
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:background="#cccccc"
+		android:textSize="20sp"
+		android:text="연습20"/>
+	
+	<TextView  
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:background="#00ffff"
+		android:textSize="10sp"
+		android:text="연습10"/>
+	
+	<TextView  
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:background="#cccccc"
+		android:textSize="40sp"
+		android:text="연습40"/>
+	
+</LinearLayout>

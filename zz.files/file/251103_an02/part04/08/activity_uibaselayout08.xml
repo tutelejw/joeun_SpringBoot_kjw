@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Layout Definition : LinearLayout-->
+<LinearLayout	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+	
+    <!-- View Definition -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="문자출력 View" />
+    
+    <EditText 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:text="문자입력 View" />
+    
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"  
+        android:text="체크박스뷰" />
+    
+    <RadioGroup 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+        <RadioButton 
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"  
+        	android:text="라이오버튼01" />
+        <RadioButton 
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"  
+        	android:text="라이오버튼02" />
+    </RadioGroup>
+    
+    <Spinner 
+       	android:layout_width="match_parent"
+       	android:layout_height="wrap_content" 
+       	android:entries="@array/spinner_data"/>
+    
+    <DatePicker 
+       	android:layout_width="wrap_content"
+       	android:layout_height="wrap_content" />
+    
+</LinearLayout>

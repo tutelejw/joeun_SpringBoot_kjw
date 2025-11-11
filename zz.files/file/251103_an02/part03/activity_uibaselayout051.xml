@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--  Layout Definition :: LinearLayout : 순서대로 Child View(Content) 배치 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <!-- android:layout_weight : 비율에 따른 배치 
+    		:: android:layouy_xxx : parentView 가 View( 나를 ?) 를 어떻게배치 
+			:: android:xxx  : content 를 어떻게 배치
+    		:: 3EA view 3 : 3 : 3 로 배치 
+    		
+    		:: attribute 는 단독효과도 갖으며 다른 속성과 서로 영향을 미친다.
+    		==>	android:layout_weight="3" 속성으로 인해 
+		   	==>	각 View 의 android:layout_height="wrap_content" 속성은 무시됨-->
+	<TextView  
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="3" 
+		android:background="#cccccc"
+		android:textSize="20sp"
+		android:gravity="center"
+		android:text="UI 연습 android:layout_weight"/>
+	
+	<EditText
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" 
+		android:layout_weight="3" 
+		android:background="#ece9d8"
+		android:text="UI연습.....android:layout_weight"/>
+	
+	<Button  
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" 
+		android:layout_weight="3" 
+		android:background="#cccccc"
+		android:textSize="15sp"
+		android:text="UI 연습 android:layout_weight"/>
+	
+</LinearLayout>

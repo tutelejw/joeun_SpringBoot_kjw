@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--  Layout Definition :: LinearLayout : 순서대로 Child View(Content) 배치 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <!-- android:layout_weight : 비율에 따른 배치 
+    		:: android:layouy_xxx : parentView 가 View( 나를 ?) 를 어떻게배치 
+			:: android:xxx  : content 를 어떻게 배치
+			
+    		:: android:layout_weight=0 의미 :  비율배치 참여 않음
+    		::  TextView : 비율배치 않고 height 20dp 배치
+    			EditEdit : 나머지배치
+    			Button : 비율배치 않고 heigth 50dp 배치-->
+	<TextView  
+		android:layout_width="match_parent"
+		android:layout_height="20dp"
+		android:layout_weight="1"
+		android:background="#cccccc"
+		android:textSize="20sp"
+		android:gravity="center"
+		android:text="UI 연습 android:layout_weight"/>
+	
+	<EditText
+		android:layout_width="match_parent" 
+		android:layout_height="0dp"
+		android:layout_weight="1" 
+		android:background="#ece9d8"
+		android:text="UI연습.....android:layout_weight"/>
+	
+	<Button  
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
+		android:layout_weight="0"
+		android:background="#cccccc"
+		android:textSize="15sp"
+		android:text="UI 연습 android:layout_weight"/>
+	
+	<!-- 위의 사항 확인후...
+			:: TextView / Button 두 View 를 android:layout_weight="0" 을 1로 변경확인
+			
+			:: attribute 는 단독효과도 갖으며 다른 속성과 서로 영향을 미친다.
+    		==>	android:layout_weight="1" 속성으로 인해 
+		   	==>	각 View 의 android:layout_height="xxdp" 속성은 무시됨-->
+	
+</LinearLayout>

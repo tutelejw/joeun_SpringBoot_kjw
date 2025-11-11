@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Layout Definition -->
+
+<!-- [3번 실행 시작 ]////////////////////////////////////////////////////////////////////////////////////
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+ 	////////////////////////////////////////////////////////////////////////////////////[3번 실행 종료 ] -->
+
+
+<!-- [2번 실행 시작 ]////////////////////////////////////////////////////////////////////////////////////
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+  ////////////////////////////////////////////////////////////////////////////////////[2번 실행 종료 ] -->
+
+
+<!-- [1번 실행 시작 ]//////////////////////////////////////////////////////////////////////////////////// -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+ <!-- ////////////////////////////////////////////////////////////////////////////////////[1번 실행 종료 ] -->
+
+    <!--	android.widget.ImageView Definition : API 확인
+           :: image source 는 drawable/tree.jpg
+                                            drawable/forest.jap
+           :: jpg , png , gif 등 이미지 포맷 지원
+           :: 이미지리소스 파일명 명명 규칙
+              ㅇ 영문, _ 이외 특수문자 사용 불가
+              ㅇ 소문자 만 사용 :  명확성
+              ㅇ 확장자를 통한 파일 구분 않됨 : 명확성
+            :: R.java 확인-->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/forest" />
+
+    <!-- adjustViewBounds : 종횡비 맞추어 적당히(?) 조정  -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/forest"
+        android:maxHeight="100dp"
+        android:maxWidth="200dp"
+        android:adjustViewBounds="true"/>
+
+    <!-- tint : 색조 -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/tree"
+        android:tint="#80ff0000"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/tree" />
+
+    <!--	android.widget.EditText Definition : API 확인
+            :: @+id : 참조 / Reference 할 수 있는 아이디 생성
+            :: R.java 확인 :  java code 에서 R.id.edit_text 로 접근-->
+    <EditText
+        android:id="@+id/edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="내용을 입력하세요."/>
+
+    <!--	android.widget.Button Definition : API 확인
+			:: @+id : 참조 / Reference 할 수 있는 아이디 생성
+			:: R.java 확인 :  java code 에서 R.id.button_input_ok 로 접근-->
+    <Button
+        android:id="@+id/button_input_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/input_ok"/>
+
+</LinearLayout>
+
+    <!-- [2번 실행 시작 ]////////////////////////////////////////////////////////////////////////////////////
+    </ScrollView>
+     ////////////////////////////////////////////////////////////////////////////////////[2번 실행 종료 ] -->
+
+    <!-- [3번 실행 시작 ]////////////////////////////////////////////////////////////////////////////////////
+    </HorizontalScrollView>
+         ////////////////////////////////////////////////////////////////////////////////////[3번 실행 종료 ] -->

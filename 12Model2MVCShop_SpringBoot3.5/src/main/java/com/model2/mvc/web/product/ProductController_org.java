@@ -1,6 +1,5 @@
 package com.model2.mvc.web.product;
 
-import java.util.List;
 import java.util.Map;
 
 //import javax.servlet.http.HttpServletRequest;
@@ -30,8 +29,8 @@ import jakarta.servlet.http.HttpServletRequest;
 //==> 회원관리 Controller
 //@Controller
 //@RequestMapping("/product/*")
-@RequestMapping("/product")
-public class ProductController_org_잘되는버전 {
+//@RequestMapping("/product")
+public class ProductController_org {
 
 	/// Field
 	@Autowired
@@ -39,17 +38,21 @@ public class ProductController_org_잘되는버전 {
 	private ProductService productService;
 	// setter Method 구현 않음
 
-	public ProductController_org_잘되는버전() {
+	public ProductController_org() {
 		System.out.println(this.getClass());
 	}
 
 	// ==> classpath:config/common.properties , classpath:config/commonservice.xml
 	// 참조 할것
 	// ==> 아래의 두개를 주석을 풀어 의미를 확인 할것
-	@Value("#{commonProperties['pageUnit']}") // @Value("#{commonProperties['pageUnit'] ?: 3}")
+//	@Value("#{commonProperties['pageUnit']}") // @Value("#{commonProperties['pageUnit'] ?: 3}")
+//	int pageUnit;
+//
+//	@Value("#{commonProperties['pageSize']}") // @Value("#{commonProperties['pageSize'] ?: 2}")
+//	int pageSize;
+	@Value("${pageUnit}")
 	int pageUnit;
-
-	@Value("#{commonProperties['pageSize']}") // @Value("#{commonProperties['pageSize'] ?: 2}")
+	@Value("${pageSize}")
 	int pageSize;
 
 	// @RequestMapping("/addProductView.do")
@@ -187,11 +190,12 @@ public class ProductController_org_잘되는버전 {
 	}
 
 	
-	  @RequestMapping(value = "listProductScroll", method = RequestMethod.GET)
+//	  @RequestMapping(value = "listProductScroll", method = RequestMethod.GET)
+	  @RequestMapping(value = "listProductScroll", method = {RequestMethod.GET, RequestMethod.POST})
 	  public String listProductScroll(@ModelAttribute("search") Search search,
 			  							Model model, 
 			  							HttpServletRequest request) throws Exception {
-	  System.out.println("/product/listProductScroll : GET");
+	  System.out.println("/product/listProductScroll : GET/POST");
 	  
 	  // 1. 페이지 초기화 요청받은 현재 페이지가 0이면 1로 설정 
 	  if (search.getCurrentPage() == 0) {
@@ -211,49 +215,8 @@ public class ProductController_org_잘되는버전 {
 	    model.addAttribute("resultPage", resultPage);          // 페이징 정보
 	    model.addAttribute("search", search);                  // 검색 조건 유지
 	  
-	  // 5. AJAX 요청인지 확인
-//      String isAjax = request.getHeader("X-Requested-With");
-//
-//      if ("XMLHttpRequest".equals(isAjax)) {
-//          // AJAX 요청일 경우 (스크롤) -> JSP 조각(fragment) 반환 (기존 로직)
-//          System.out.println("AJAX request detected. Returning fragment.");
-//          System.out.println("if 에서 실행됨==========");
-//          return "forward:/product/listProductScroll.jsp";
-//      } else {
-//          // 일반 브라우저 요청일 경우 (첫 로드) -> 전체 레이아웃을 포함하는 뷰 이름 반환
-//          System.out.println("Browser request detected. Returning full view.");
-//          
-//          // 🚨 중요: "product/listProduct" 컨트롤러가 반환하는 것과 유사한
-//          //    템플릿(Tiles/Sitemesh 등)이 적용되는 논리적 뷰 이름을 반환해야 합니다.
-//          //    (예: "product/listProductScroll")
-//          System.out.println("if else 실행됨==========");
-//          return "product/listProductScroll.jsp"; 
-//          // ※ 만약 뷰 리졸버 설정이 /WEB-INF/views/product/listProductScroll.jsp 와 같다면
-//          //    위와 같이 "product/listProductScroll"로 반환해야 합니다.
-//          //    정상 작동하는 listProduct.jsp의 컨트롤러 리턴 값을 참고하세요.
-//      }
-//      // Ajax 요청에 대해서 HTML 형태로 반환 (이 부분이 중요) 
-	  return "forward:/product/listProductScroll.jsp";
-//	  //return  "/product/listProductScroll.jsp"; // AJAX로 추가된 데이터를 렌더링할 JSP 파일 }
-	  
-}
+	  return "forward:/product/listProductScroll.jsp";  
+	  }
 
-	/*
-	 * @RequestMapping(value = "listProductScroll", method = RequestMethod.POST)
-	 * public String listProductScroll(@ModelAttribute("search") Search search,
-	 * Model model) throws Exception { if(search.getCurrentPage() == 0){
-	 * search.setCurrentPage(1); } int pageSize = 10; // 페이지당 항목 수 (컨트롤러 내 일치시킴)
-	 * search.setPageSize(pageSize);
-	 * 
-	 * Map<String, Object> map = productService.getProductList(search); int
-	 * totalCount = (Integer) map.get("totalCount");
-	 * 
-	 * Page resultPage = new Page(search.getCurrentPage(), totalCount, 10,
-	 * pageSize); model.addAttribute("list", map.get("list"));
-	 * model.addAttribute("resultPage", resultPage);
-	 * 
-	 * return "forward:/product/listProductScroll.jsp"; // Ajax 로불러올 JSP 경로
-	 * (/WEB-INF/views/product/listProductScroll.jsp) }
-	 */
 
 }
