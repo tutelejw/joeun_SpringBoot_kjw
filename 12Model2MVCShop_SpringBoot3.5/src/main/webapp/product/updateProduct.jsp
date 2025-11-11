@@ -37,7 +37,8 @@ Product product=(Product)request.getAttribute("product");
 <script type="text/javascript">
 $(document).ready(function() {
   // 파일 변경 시 미리보기
-  $("input[type='file'][name='fileName']").on("change", function(e){
+  /* $("input[type='file'][name='fileName']").on("change", function(e){ */
+  $("input[type='file'][name='uploadFile']").on("change", function(e){
     var reader = new FileReader();
     reader.onload = function(e) {
       $('#imgPreview').attr('src', e.target.result);
@@ -126,7 +127,8 @@ style="width:100px; height:19px"   maxLength="100">
         <img id="imgPreview" class="preview-img" src="https://via.placeholder.com/180?text=No+Image" alt="미리보기"/>
         <br>
     </c:if>
-    <input type="file" name="fileName" accept="image/*">
+    <!-- <input type="file" name="fileName" accept="image/*"> -->
+    <input type="file" name="uploadFile" accept="image/*">
     <br>
     <small>${product.fileName}</small>
 </td>

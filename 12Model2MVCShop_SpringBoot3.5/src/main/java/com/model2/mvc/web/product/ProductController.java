@@ -171,20 +171,34 @@ public class ProductController {
 //		return "redirect:/product/getProduct?prodNo=" + product.getProdNo();
 //	}
 	
+	// ===== 추가: @Value 어노테이션으로 업로드 경로 주입 =====
+	@Value("${file.upload-dir}")
+	private String uploadDir;
+	// ===== 추가 끝 =====
+
 	@RequestMapping(value = "updateProduct", method = RequestMethod.POST)
 	public String updateProduct(
 	        @ModelAttribute("product") Product product,
-	        @RequestParam("fileName") MultipartFile uploadFile,
+	        // ===== 수정: fileName -> uploadFile, required = false 추가 =====
+	        @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
+	        // ===== 수정 끝 =====
 	        Model model, HttpSession session) throws Exception {
 
-	    if (!uploadFile.isEmpty()) {
-	        String uploadDir = "src/main/resources/static/images";  // 업로드 경로
+	    // ===== 수정: uploadFile != null 체크 추가 =====
+	    if (uploadFile != null && !uploadFile.isEmpty()) {
+	        // ===== 수정 끝 =====
+	        
+	        // ===== 수정: 상대 경로 -> uploadDir 변수 사용 =====
 	        File uploadDirFile = new File(uploadDir);
+	        // ===== 수정 끝 =====
 
 	        // 폴더가 없으면 생성
 	        if (!uploadDirFile.exists()) {
 	            boolean created = uploadDirFile.mkdirs();
-	            System.out.println("Upload directory created: " + created);
+	            // ===== 추가: 로그 개선 =====
+	            System.out.println("[Upload] 디렉토리 생성: " + created);
+	            System.out.println("[Upload] 경로: " + uploadDirFile.getAbsolutePath());
+	            // ===== 추가 끝 =====
 	        }
 
 	        // 저장할 파일명 생성 (UUID + 원본파일명)
@@ -193,7 +207,9 @@ public class ProductController {
 
 	        // 파일 저장
 	        uploadFile.transferTo(dest);
-	        System.out.println("File saved to: " + dest.getAbsolutePath());
+	        // ===== 수정: 로그 개선 =====
+	        System.out.println("[Upload] 파일 저장 성공: " + dest.getAbsolutePath());
+	        // ===== 수정 끝 =====
 
 	        // 현재 시간 포맷팅
 	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -202,26 +218,30 @@ public class ProductController {
 	        // 로그용 텍스트 파일 생성 및 기록(append)
 	        File logFile = new File(uploadDirFile, "upload_log.txt");
 	        try (FileWriter fw = new FileWriter(logFile, true)) {
-	            fw.write("Uploaded file: " + savedFileName + " at " + nowStr + "\n");
+	            // ===== 수정: 로그 메시지 간결화 =====
+	            fw.write("Uploaded: " + savedFileName + " at " + nowStr + "\n");
+	            // ===== 수정 끝 =====
 	        }
 
 	        // 도메인 객체에 파일명 저장
 	        product.setFileName(savedFileName);
 	    } else {
-	        System.out.println("No file uploaded.");
+	        // ===== 추가: 파일 선택 안했을 때 로그 =====
+	        System.out.println("[Upload] 파일 선택 안됨. 기존 파일 유지: " + product.getFileName());
+	        // ===== 추가 끝 =====
 	    }
 
 	    productService.updateProduct(product);
 
-	    int sessionId = ((Product) session.getAttribute("product")).getProdNo();
-	    if (sessionId == product.getProdNo()) {
+	    // ===== 수정: null 체크 추가 및 변수명 개선 =====
+	    Product sessionProduct = (Product) session.getAttribute("product");
+	    if (sessionProduct != null && sessionProduct.getProdNo() == product.getProdNo()) {
 	        session.setAttribute("product", product);
 	    }
+	    // ===== 수정 끝 =====
 
 	    return "redirect:/product/getProduct?prodNo=" + product.getProdNo();
 	}
-
-
 
 
 
