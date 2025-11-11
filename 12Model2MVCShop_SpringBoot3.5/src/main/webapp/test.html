@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyWebApp - 쇼핑몰</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.0.16/24/outline/hero-icons.min.css" rel="stylesheet">
+    <style>
+        /* 부드러운 전환 효과를 위한 기본 스타일 */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 드롭다운 메뉴를 위한 스타일 */
+        .dropdown-menu {
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 로고 줌인 효과를 위한 스플래시 화면 스타일 */
+        #splash-screen {
+            animation: fadeOutSplashScreen 2.5s ease-in-out forwards;
+        }
+        #splash-logo {
+            animation: zoomInLogo 2.2s ease-in-out forwards;
+        }
+        @keyframes zoomInLogo {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        @keyframes fadeOutSplashScreen {
+            0%, 80% {
+                opacity: 1;
+                visibility: visible;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+
+    <!-- 로딩 스플래시 화면 -->
+    <div id="splash-screen" class="fixed inset-0 bg-white flex items-center justify-center z-[9999]">
+        <h1 id="splash-logo" class="text-5xl md:text-7xl font-black text-indigo-600">MyWebApp</h1>
+    </div>
+
+    <!-- 전체 컨테이너 -->
+    <div id="app" class="min-h-screen flex flex-col">
+
+        <!-- 헤더 / 네비게이션 바 -->
+        <header class="bg-white shadow-md sticky top-0 z-50">
+            <nav id="navbar" class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- 네비게이션 바 내용이 여기에 동적으로 렌더링됩니다. -->
+            </nav>
+        </header>
+
+        <!-- 메인 컨텐츠 -->
+        <main class="flex-grow container mx-auto p-4 sm:p-6 lg:p-8">
+            <!-- 홈 (상품 목록) 페이지 -->
+            <section id="page-home" class="page active">
+                <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+                    <h1 class="text-3xl font-bold text-gray-900">상품 목록</h1>
+                    <div class="flex items-center space-x-4">
+                         <input type="text" id="product-search-input" placeholder="상품 이름으로 검색..." class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition w-40 sm:w-auto">
+                        <div id="view-toggle-buttons" class="flex items-center bg-gray-200 rounded-lg p-1">
+                             <button id="view-grid-btn" class="p-2 rounded-md bg-white shadow">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                                </svg>
+                            </button>
+                            <button id="view-list-btn" class="p-2 rounded-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="product-list-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- 상품 카드가 여기에 동적으로 렌더링됩니다. -->
+                </div>
+            </section>
+
+            <!-- 로그인 페이지 -->
+            <section id="page-login" class="page">
+                <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg">
+                    <h1 class="text-3xl font-bold text-center mb-6">로그인</h1>
+                    <form id="login-form">
+                        <div class="mb-4">
+                            <label for="login-username" class="block text-sm font-medium text-gray-700 mb-1">사용자 이름</label>
+                            <input type="text" id="login-username" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
+                            <input type="password" id="login-password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300">로그인</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 회원가입 페이지 -->
+            <section id="page-register" class="page">
+                 <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg">
+                    <h1 class="text-3xl font-bold text-center mb-6">회원가입</h1>
+                    <form id="register-form">
+                        <div class="mb-4">
+                            <label for="register-username" class="block text-sm font-medium text-gray-700 mb-1">사용자 이름</label>
+                            <input type="text" id="register-username" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
+                            <input type="password" id="register-password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        </div>
+                         <div class="mb-6">
+                            <label for="register-password-confirm" class="block text-sm font-medium text-gray-700 mb-1">비밀번호 확인</label>
+                            <input type="password" id="register-password-confirm" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition duration-300">가입하기</button>
+                    </form>
+                </div>
+            </section>
+            
+            <!-- 내 정보 페이지 -->
+            <section id="page-my-info" class="page">
+                <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg">
+                    <h1 class="text-3xl font-bold text-center mb-6">내 정보</h1>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">사용자 이름</p>
+                            <p id="my-info-username" class="text-lg"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">역할</p>
+                            <p id="my-info-role" class="text-lg"></p>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                         <button id="delete-account-btn" class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-300">회원 탈퇴</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 상품 등록/수정 페이지 (관리자) -->
+            <section id="page-product-add" class="page">
+                 <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                    <h1 id="product-form-title" class="text-3xl font-bold text-gray-900 mb-6">새 상품 등록</h1>
+                    <form id="product-form" class="space-y-4">
+                        <input type="hidden" id="product-id">
+                        <div>
+                            <label for="product-name" class="block text-sm font-medium text-gray-700">상품명</label>
+                            <input type="text" id="product-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                        </div>
+                        <div>
+                            <label for="product-price" class="block text-sm font-medium text-gray-700">가격</label>
+                            <input type="number" id="product-price" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                        </div>
+                        <div>
+                            <label for="product-image" class="block text-sm font-medium text-gray-700">이미지 URL</label>
+                            <input type="text" id="product-image" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                        </div>
+                        <div>
+                            <label for="product-desc" class="block text-sm font-medium text-gray-700">상품 설명</label>
+                            <textarea id="product-desc" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                        </div>
+                        <div class="flex space-x-4">
+                            <button type="submit" class="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition">저장</button>
+                            <button type="button" id="cancel-edit-btn" class="flex-1 bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition hidden">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 상품 목록 관리 페이지 (관리자) -->
+            <section id="page-product-admin-list" class="page">
+                <h1 class="text-3xl font-bold text-gray-900 mb-6">상품 목록 관리</h1>
+                <div id="admin-product-list" class="bg-white rounded-xl shadow-lg overflow-x-auto">
+                    <!-- 관리자용 상품 목록이 여기에 렌더링됩니다. -->
+                </div>
+            </section>
+            
+            <!-- 회원 관리 페이지 (관리자) -->
+            <section id="page-user-admin" class="page">
+                <h1 class="text-3xl font-bold text-gray-900 mb-6">회원 관리</h1>
+                <div class="bg-white rounded-xl shadow-lg overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-4 font-semibold">ID</th>
+                                <th class="p-4 font-semibold">사용자 이름</th>
+                                <th class="p-4 font-semibold">역할</th>
+                                <th class="p-4 font-semibold">작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-list-tbody">
+                            <!-- 회원 목록이 여기에 렌더링됩니다. -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 게시판 페이지 -->
+            <section id="page-board" class="page">
+                <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                    <h1 class="text-3xl font-bold text-center mb-8">게시판</h1>
+                    <div class="space-y-6">
+                        <div class="border-b pb-4">
+                            <h2 class="text-2xl font-semibold text-gray-800">공지사항</h2>
+                            <p class="mt-2 text-gray-600">MyWebApp이 정식으로 오픈했습니다! 많은 관심 부탁드립니다.</p>
+                            <p class="text-sm text-gray-400 mt-1">2025-07-28</p>
+                        </div>
+                        <div class="border-b pb-4">
+                            <h2 class="text-2xl font-semibold text-gray-800">FAQ: 자주 묻는 질문</h2>
+                            <div class="mt-4 space-y-2">
+                                <p><strong class="font-medium text-gray-700">Q: 배송은 얼마나 걸리나요?</strong></p>
+                                <p class="text-gray-600">A: 보통 2~3일 소요됩니다.</p>
+                                <p><strong class="font-medium text-gray-700">Q: 관리자 계정은 어떻게 만드나요?</strong></p>
+                                <p class="text-gray-600">A: 이 웹앱은 `localStorage`를 사용합니다. 최초 실행 시 'admin' 계정이 'admin' 비밀번호로 자동 생성됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 푸터 -->
+        <footer class="bg-white mt-12">
+            <div class="container mx-auto py-6 px-4 text-center text-gray-500">
+                <p>&copy; 2025 MyWebApp. All Rights Reserved.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- 모달 (알림창) -->
+    <div id="alert-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] hidden">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 max-w-sm text-center">
+            <p id="alert-modal-message" class="text-lg mb-4"></p>
+            <button id="alert-modal-close" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">확인</button>
+        </div>
+    </div>
+
+    <!-- 이미지 모달 -->
+    <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white p-2 rounded-lg shadow-xl max-w-4xl w-full max-h-full relative">
+            <button id="image-modal-close" class="absolute -top-3 -right-3 bg-white text-black rounded-full p-1 leading-none text-2xl z-10">&times;</button>
+            <img id="image-modal-content" src="" alt="" class="w-full h-auto max-h-[85vh] object-contain rounded">
+            <p id="image-modal-caption" class="text-center text-gray-800 mt-2 font-semibold"></p>
+        </div>
+    </div>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- 상태 관리 (State Management) ---
+        let currentUser = null;
+        let users = [];
+        let products = [];
+        let currentView = 'grid'; // 'grid' or 'list'
+
+        // --- DOM 요소 ---
+        const app = document.getElementById('app');
+        const navbar = document.getElementById('navbar');
+        const pages = document.querySelectorAll('.page');
+        const productListContainer = document.getElementById('product-list-container');
+        const adminProductListContainer = document.getElementById('admin-product-list');
+        const userListTbody = document.getElementById('user-list-tbody');
+        
+        // Form Elements
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const productForm = document.getElementById('product-form');
+        
+        // Modal Elements
+        const alertModal = document.getElementById('alert-modal');
+        const alertModalMessage = document.getElementById('alert-modal-message');
+        const alertModalClose = document.getElementById('alert-modal-close');
+        const imageModal = document.getElementById('image-modal');
+        const imageModalContent = document.getElementById('image-modal-content');
+        const imageModalCaption = document.getElementById('image-modal-caption');
+        const imageModalClose = document.getElementById('image-modal-close');
+
+        // --- 초기화 (Initialization) ---
+        function initialize() {
+            loadDataFromLocalStorage();
+            checkSession();
+            renderAll();
+            setupEventListeners();
+        }
+
+        function loadDataFromLocalStorage() {
+            // 사용자 데이터 로드
+            const storedUsers = localStorage.getItem('mywebapp_users');
+            if (storedUsers) {
+                users = JSON.parse(storedUsers);
+            } else {
+                users = []; // 사용자가 없으면 빈 배열로 시작
+            }
+
+            // 상품 데이터 로드 또는 초기화
+            const storedProducts = localStorage.getItem('mywebapp_products');
+            if (storedProducts && JSON.parse(storedProducts).length === 20) { // 100개인지 확인
+                products = JSON.parse(storedProducts);
+            } else {
+                // 100개의 샘플 상품 데이터 생성
+                products = [];
+                const itemTypes = ['가죽 자켓', '비니', '청자켓', '롱 슬리브', '카디건', '첼시 부츠', '크로스백', '패딩 자켓'];
+                const itemAdjectives = ['모던', '클래식', '빈티지', '캐주얼', '스트리트', '미니멀', '오버핏', '슬림핏', '프리미엄', '베이직'];
+                const imageUrls = [
+                    'https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg?auto=compress&cs=tinysrgb&w=800',
+                    'https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?auto=compress&cs=tinysrgb&w=800',
+                    'https://images.pexels.com/photos/3709661/pexels-photo-3709661.jpeg?auto=compress&cs=tinysrgb&w=800',
+                    'https://images.pexels.com/photos/8783457/pexels-photo-8783457.jpeg?auto=compress&cs=tinysrgb&w=800'
+                ];
+                
+                for (let i = 0; i < 10; i++) {
+                    const typeIndex = i % itemTypes.length;
+                    const type = itemTypes[typeIndex];
+                    const adj = itemAdjectives[i % itemAdjectives.length];
+                    const name = `${adj} ${type} #${i + 1}`;
+                    
+                    products.push({
+                        id: `prod-${i + 1}`,
+                        name: name,
+                        price: Math.round(Math.random() * 2800 + 200) * 100, // 20,000원에서 300,000원 사이, 100원 단위
+                        description: `${adj} 스타일의 멋진 ${type}입니다. 다양한 코디에 활용해보세요.`,
+                        imageUrl: imageUrls[typeIndex] // 실제 이미지 URL 매칭
+                    });
+                }
+                localStorage.setItem('mywebapp_products', JSON.stringify(products));
+            }
+        }
+
+        function checkSession() {
+            const sessionUser = sessionStorage.getItem('mywebapp_session');
+            if (sessionUser) {
+                currentUser = JSON.parse(sessionUser);
+            }
+        }
+
+        // --- 렌더링 (Rendering) ---
+        function renderAll() {
+            renderNavbar();
+            renderProductList();
+            if (currentUser && currentUser.role === 'admin') {
+                renderAdminProductList();
+                renderUserList();
+            }
+        }
+        
+        function renderNavbar() {
+            let navHTML = '';
+            // 데스크톱용 메뉴
+            const desktopNavItems = `
+                <a href="#" data-page="home" class="nav-link text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                    <span>상품 목록</span>
+                </a>
+                <a href="#" data-page="board" class="nav-link text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    <span>게시판</span>
+                </a>
+            `;
+            // 모바일용 메뉴
+            const mobileNavItems = `
+                <a href="#" data-page="home" class="nav-link text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">상품 목록</a>
+                <a href="#" data-page="board" class="nav-link text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">게시판</a>
+            `;
+
+            if (currentUser) { // 로그인 상태
+                const isAdmin = currentUser.role === 'admin';
+                const adminDesktopMenu = isAdmin ? `
+                    <div class="relative dropdown">
+                        <button class="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 transition h-full">
+                            <span>회원관리</span><svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="dropdown-menu absolute right-0 w-48 bg-white rounded-md shadow-lg py-1 z-20">
+                            <a href="#" data-page="user-admin" class="nav-link block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">회원 목록 보기</a>
+                        </div>
+                    </div>
+                    <div class="relative dropdown">
+                        <button class="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 transition h-full">
+                            <span>상품관리</span><svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="dropdown-menu absolute right-0 w-48 bg-white rounded-md shadow-lg py-1 z-20">
+                            <a href="#" data-page="product-add" class="nav-link block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">상품 등록</a>
+                            <a href="#" data-page="product-admin-list" class="nav-link block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">상품 목록 관리</a>
+                        </div>
+                    </div>
+                ` : '';
+                const adminMobileMenu = isAdmin ? `
+                    <a href="#" data-page="user-admin" class="nav-link text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">회원 목록 보기</a>
+                    <a href="#" data-page="product-add" class="nav-link text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">상품 등록</a>
+                    <a href="#" data-page="product-admin-list" class="nav-link text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">상품 목록 관리</a>
+                ` : '';
+
+                navHTML = `
+                    <div class="flex justify-between items-center h-16">
+                        <div class="flex-shrink-0"><a href="#" data-page="home" class="nav-link text-xl font-bold text-indigo-600">MyWebApp</a></div>
+                        <div class="hidden md:flex items-stretch space-x-4">${desktopNavItems}${adminDesktopMenu}</div>
+                        <div class="hidden md:block">
+                            <div class="relative dropdown h-full flex items-center">
+                                <button class="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 transition h-full">
+                                    <span>${isAdmin ? '관리자' : currentUser.username}님</span><svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div class="dropdown-menu absolute right-0 top-full w-48 bg-white rounded-md shadow-lg py-1 z-20">
+                                    ${!isAdmin ? `<a href="#" data-page="my-info" class="nav-link block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">내 정보 보기</a>` : ''}
+                                    <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">로그아웃</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:hidden flex items-center">
+                            <button id="mobile-menu-button" class="p-2 rounded-md text-gray-600 hover:text-gray-900">
+                                <svg id="menu-open-icon" class="h-6 w-6 block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                                <svg id="menu-close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="mobile-menu" class="md:hidden hidden">
+                        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                            ${mobileNavItems}
+                            ${adminMobileMenu}
+                            <div class="border-t border-gray-200 mt-3 pt-3">
+                                <p class="px-3 py-2 text-sm font-medium text-gray-500">${isAdmin ? '관리자' : currentUser.username}님</p>
+                                ${!isAdmin ? `<a href="#" data-page="my-info" class="nav-link text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">내 정보 보기</a>` : ''}
+                                <a href="#" id="mobile-logout-btn" class="nav-link text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">로그아웃</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else { // 로그아웃 상태
+                navHTML = `
+                    <div class="flex justify-between items-center h-16">
+                        <div class="flex-shrink-0"><a href="#" data-page="home" class="nav-link text-xl font-bold text-indigo-600">MyWebApp</a></div>
+                        <div class="hidden md:flex items-center space-x-4">${desktopNavItems}</div>
+                        <div class="hidden md:flex items-center space-x-2">
+                            <a href="#" data-page="login" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 transition">로그인</a>
+                            <a href="#" data-page="register" class="nav-link bg-indigo-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition">회원가입</a>
+                        </div>
+                        <div class="md:hidden flex items-center">
+                            <button id="mobile-menu-button" class="p-2 rounded-md text-gray-600 hover:text-gray-900">
+                                <svg id="menu-open-icon" class="h-6 w-6 block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                                <svg id="menu-close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="mobile-menu" class="md:hidden hidden">
+                        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                            ${mobileNavItems}
+                            <a href="#" data-page="login" class="nav-link text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">로그인</a>
+                            <a href="#" data-page="register" class="nav-link text-gray-700 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">회원가입</a>
+                        </div>
+                    </div>
+                `;
+            }
+            navbar.innerHTML = navHTML;
+        }
+
+        function renderProductList(filteredProducts = products) {
+            productListContainer.innerHTML = '';
+            if (filteredProducts.length === 0) {
+                productListContainer.innerHTML = `<p class="col-span-full text-center text-gray-500">표시할 상품이 없습니다.</p>`;
+                return;
+            }
+
+            if (currentView === 'grid') {
+                productListContainer.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6';
+                filteredProducts.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-lg shadow-md overflow-hidden flex flex-col';
+                    card.innerHTML = `
+                        <a href="#" class="block product-image-link" data-img-src="${p.imageUrl}" data-img-caption="${p.name}">
+                            <img src="${p.imageUrl}" alt="${p.name}" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/E2E8F0/4A5568?text=이미지+로드+실패';">
+                        </a>
+                        <div class="p-4 flex flex-col flex-grow">
+                            <h3 class="text-lg font-semibold truncate flex-grow">${p.name}</h3>
+                            <p class="text-gray-500 mt-1 text-sm">${p.description}</p>
+                            <p class="text-xl font-bold text-indigo-600 mt-2">${p.price.toLocaleString()}원</p>
+                        </div>
+                    `;
+                    productListContainer.appendChild(card);
+                });
+            } else { // list view
+                productListContainer.className = 'space-y-4';
+                filteredProducts.forEach(p => {
+                    const item = document.createElement('div');
+                    item.className = 'bg-white rounded-lg shadow-md overflow-hidden flex items-center p-4 transform hover:shadow-xl transition-shadow duration-300';
+                    item.innerHTML = `
+                        <a href="#" class="block product-image-link flex-shrink-0" data-img-src="${p.imageUrl}" data-img-caption="${p.name}">
+                            <img src="${p.imageUrl}" alt="${p.name}" class="w-24 h-24 object-cover rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/600x400/E2E8F0/4A5568?text=이미지+로드+실패';">
+                        </a>
+                        <div class="ml-4 flex-grow">
+                            <h3 class="text-lg font-semibold">${p.name}</h3>
+                            <p class="text-gray-500 mt-1 text-sm">${p.description}</p>
+                        </div>
+                        <p class="text-xl font-bold text-indigo-600 w-32 text-right flex-shrink-0">${p.price.toLocaleString()}원</p>
+                    `;
+                    productListContainer.appendChild(item);
+                });
+            }
+        }
+
+        function renderAdminProductList() {
+            adminProductListContainer.innerHTML = '';
+            if (products.length === 0) {
+                adminProductListContainer.innerHTML = `<p class="p-4 text-center text-gray-500">등록된 상품이 없습니다.</p>`;
+                return;
+            }
+            const table = document.createElement('table');
+            table.className = 'w-full text-left';
+            table.innerHTML = `
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="p-4 font-semibold hidden sm:table-cell">이미지</th>
+                        <th class="p-4 font-semibold">상품명</th>
+                        <th class="p-4 font-semibold">가격</th>
+                        <th class="p-4 font-semibold">작업</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${products.map(p => `
+                        <tr class="border-b">
+                            <td class="p-2 hidden sm:table-cell"><img src="${p.imageUrl}" class="w-16 h-16 object-cover rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/100x100/E2E8F0/4A5568?text=X';"></td>
+                            <td class="p-2 font-medium">${p.name}</td>
+                            <td class="p-2">${p.price.toLocaleString()}원</td>
+                            <td class="p-2">
+                                <button data-id="${p.id}" class="edit-product-btn text-indigo-600 hover:text-indigo-900 mr-2">수정</button>
+                                <button data-id="${p.id}" class="delete-product-btn text-red-600 hover:text-red-900">삭제</button>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            `;
+            adminProductListContainer.appendChild(table);
+        }
+
+        function renderUserList() {
+            userListTbody.innerHTML = '';
+            if (users.length === 0) {
+                userListTbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">등록된 회원이 없습니다.</td></tr>`;
+                return;
+            }
+            users.forEach(u => {
+                const row = document.createElement('tr');
+                row.className = 'border-b';
+                row.innerHTML = `
+                    <td class="p-4">${u.id}</td>
+                    <td class="p-4">${u.username}</td>
+                    <td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full ${u.role === 'admin' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}">${u.role}</span></td>
+                    <td class="p-4">
+                        ${u.role !== 'admin' ? `<button data-id="${u.id}" class="delete-user-btn text-red-600 hover:text-red-900">삭제</button>` : '삭제 불가'}
+                    </td>
+                `;
+                userListTbody.appendChild(row);
+            });
+        }
+        
+        // --- 페이지 전환 (Navigation) ---
+        function showPage(pageId) {
+            pages.forEach(p => p.classList.remove('active'));
+            const targetPage = document.getElementById(pageId);
+            if(targetPage) {
+                targetPage.classList.add('active');
+            }
+            window.scrollTo(0, 0); // 페이지 상단으로 스크롤
+        }
+
+        // --- 이벤트 핸들러 (Event Handlers) ---
+        function setupEventListeners() {
+            // 네비게이션 및 기타 클릭 이벤트 위임
+            app.addEventListener('click', e => {
+                const navLink = e.target.closest('.nav-link');
+                const mobileMenuButton = e.target.closest('#mobile-menu-button');
+                const imageLink = e.target.closest('.product-image-link');
+
+                // 네비게이션 링크 클릭 처리
+                if (navLink) {
+                    e.preventDefault();
+                    const pageId = `page-${navLink.dataset.page}`;
+                    
+                    // 상품 등록 페이지로 갈 때 폼 리셋
+                    if (pageId === 'page-product-add') {
+                        resetProductForm();
+                    }
+
+                    showPage(pageId);
+
+                    // 모바일 메뉴가 열려있으면 닫기
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        document.getElementById('menu-open-icon').classList.remove('hidden');
+                        document.getElementById('menu-close-icon').classList.add('hidden');
+                    }
+                }
+                
+                // 이미지 모달 열기
+                if (imageLink) {
+                    e.preventDefault();
+                    const imgSrc = imageLink.dataset.imgSrc;
+                    const imgCaption = imageLink.dataset.imgCaption;
+                    openImageModal(imgSrc, imgCaption);
+                }
+
+                // 모바일 메뉴 버튼 토글
+                if (mobileMenuButton) {
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const openIcon = document.getElementById('menu-open-icon');
+                    const closeIcon = document.getElementById('menu-close-icon');
+                    mobileMenu.classList.toggle('hidden');
+                    openIcon.classList.toggle('hidden');
+                    closeIcon.classList.toggle('hidden');
+                }
+
+                // 로그아웃 버튼 처리 (데스크톱 + 모바일)
+                if (e.target.id === 'logout-btn' || e.target.id === 'mobile-logout-btn') {
+                    e.preventDefault();
+                    logout();
+                }
+                
+                // 회원 탈퇴 버튼
+                if (e.target.closest('#delete-account-btn')) {
+                    if (confirm('정말로 회원 탈퇴를 하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                        deleteAccount();
+                    }
+                }
+                
+                // 상품 관리 버튼 (수정/삭제)
+                if (e.target.closest('.edit-product-btn')) {
+                    const id = e.target.closest('.edit-product-btn').dataset.id;
+                    handleEditProduct(id);
+                }
+                if (e.target.closest('.delete-product-btn')) {
+                    const id = e.target.closest('.delete-product-btn').dataset.id;
+                    if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
+                        deleteProduct(id);
+                    }
+                }
+                
+                // 회원 관리 버튼 (삭제)
+                if (e.target.closest('.delete-user-btn')) {
+                    const id = e.target.closest('.delete-user-btn').dataset.id;
+                    if (confirm('정말로 이 회원을 삭제하시겠습니까?')) {
+                        deleteUser(id);
+                    }
+                }
+            });
+
+            // 폼 제출
+            loginForm.addEventListener('submit', handleLogin);
+            registerForm.addEventListener('submit', handleRegister);
+            productForm.addEventListener('submit', handleProductFormSubmit);
+
+            // 상품 뷰 토글
+            document.getElementById('view-grid-btn').addEventListener('click', () => setView('grid'));
+            document.getElementById('view-list-btn').addEventListener('click', () => setView('list'));
+
+            // 상품 검색
+            document.getElementById('product-search-input').addEventListener('input', e => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filtered = products.filter(p => p.name.toLowerCase().includes(searchTerm));
+                renderProductList(filtered);
+            });
+
+            // 상품 수정 취소
+            document.getElementById('cancel-edit-btn').addEventListener('click', resetProductForm);
+
+            // 모달 닫기
+            alertModalClose.addEventListener('click', () => alertModal.classList.add('hidden'));
+            imageModalClose.addEventListener('click', closeImageModal);
+            imageModal.addEventListener('click', (e) => {
+                if(e.target === imageModal) {
+                    closeImageModal();
+                }
+            });
+
+        }
+        
+        // --- 기능 함수 (Core Logic) ---
+        function showAlert(message) {
+            alertModalMessage.textContent = message;
+            alertModal.classList.remove('hidden');
+        }
+
+        function openImageModal(src, caption) {
+            imageModalContent.src = src;
+            imageModalContent.alt = caption;
+            imageModalCaption.textContent = caption;
+            imageModal.classList.remove('hidden');
+        }
+
+        function closeImageModal() {
+            imageModal.classList.add('hidden');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = e.target.elements['login-username'].value;
+            const password = e.target.elements['login-password'].value;
+            
+            // 하드코딩된 관리자 계정 체크
+            if (username === 'admin' && password === 'admin') {
+                currentUser = { id: 'admin-special', username: 'admin', role: 'admin' };
+                sessionStorage.setItem('mywebapp_session', JSON.stringify(currentUser));
+                showAlert('관리자님, 환영합니다!');
+                loginForm.reset();
+                renderAll();
+                showPage('page-home');
+                return;
+            }
+
+            // localStorage에 저장된 일반 사용자 체크
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                currentUser = user;
+                sessionStorage.setItem('mywebapp_session', JSON.stringify(currentUser));
+                showAlert(`${user.username}님, 환영합니다!`);
+                loginForm.reset();
+                renderAll();
+                showPage('page-home');
+            } else {
+                showAlert('사용자 이름 또는 비밀번호가 올바르지 않습니다.');
+            }
+        }
+        
+        function handleRegister(e) {
+            e.preventDefault();
+            const username = e.target.elements['register-username'].value;
+            const password = e.target.elements['register-password'].value;
+            const confirmPassword = e.target.elements['register-password-confirm'].value;
+
+            if (password !== confirmPassword) {
+                showAlert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
+            if (username.toLowerCase() === 'admin') {
+                showAlert("'admin'은 예약된 사용자 이름으로 사용할 수 없습니다.");
+                return;
+            }
+            if (users.some(u => u.username === username)) {
+                showAlert('이미 사용 중인 사용자 이름입니다.');
+                return;
+            }
+            
+            const newUser = {
+                id: `user-${Date.now()}`,
+                username,
+                password,
+                role: 'user' // 기본 역할은 'user'
+            };
+            users.push(newUser);
+            localStorage.setItem('mywebapp_users', JSON.stringify(users));
+            
+            showAlert('회원가입이 완료되었습니다. 로그인해주세요.');
+            registerForm.reset();
+            renderAll();
+            showPage('page-login');
+        }
+
+        function logout() {
+            currentUser = null;
+            sessionStorage.removeItem('mywebapp_session');
+            showAlert('로그아웃되었습니다.');
+            renderAll();
+            showPage('page-home');
+        }
+
+        function deleteAccount() {
+            if (!currentUser) return;
+            users = users.filter(u => u.id !== currentUser.id);
+            localStorage.setItem('mywebapp_users', JSON.stringify(users));
+            logout();
+        }
+
+        function deleteUser(userId) {
+            users = users.filter(u => u.id !== userId);
+            localStorage.setItem('mywebapp_users', JSON.stringify(users));
+            showAlert('회원이 삭제되었습니다.');
+            renderAll();
+        }
+
+        function handleProductFormSubmit(e) {
+            e.preventDefault();
+            const id = e.target.elements['product-id'].value;
+            const productData = {
+                name: e.target.elements['product-name'].value,
+                price: parseFloat(e.target.elements['product-price'].value),
+                imageUrl: e.target.elements['product-image'].value,
+                description: e.target.elements['product-desc'].value,
+            };
+
+            if (id) { // 수정
+                const index = products.findIndex(p => p.id === id);
+                if (index > -1) {
+                    products[index] = { ...products[index], ...productData };
+                }
+                showAlert('상품 정보가 수정되었습니다.');
+            } else { // 생성
+                productData.id = `prod-${Date.now()}`;
+                products.push(productData);
+                showAlert('새 상품이 등록되었습니다.');
+            }
+            
+            localStorage.setItem('mywebapp_products', JSON.stringify(products));
+            resetProductForm();
+            renderAll();
+            showPage('page-product-admin-list'); // 저장 후 목록 페이지로 이동
+        }
+        
+        function handleEditProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                document.getElementById('product-id').value = product.id;
+                document.getElementById('product-name').value = product.name;
+                document.getElementById('product-price').value = product.price;
+                document.getElementById('product-image').value = product.imageUrl;
+                document.getElementById('product-desc').value = product.description;
+                document.getElementById('product-form-title').textContent = '상품 수정';
+                document.getElementById('cancel-edit-btn').classList.remove('hidden');
+                showPage('page-product-add');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function deleteProduct(id) {
+            products = products.filter(p => p.id !== id);
+            localStorage.setItem('mywebapp_products', JSON.stringify(products));
+            showAlert('상품이 삭제되었습니다.');
+            renderAll();
+        }
+
+        function resetProductForm() {
+            productForm.reset();
+            document.getElementById('product-id').value = '';
+            document.getElementById('product-form-title').textContent = '새 상품 등록';
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+        }
+
+        function setView(view) {
+            currentView = view;
+            const gridBtn = document.getElementById('view-grid-btn');
+            const listBtn = document.getElementById('view-list-btn');
+            if (view === 'grid') {
+                gridBtn.classList.add('bg-white', 'shadow');
+                listBtn.classList.remove('bg-white', 'shadow');
+            } else {
+                listBtn.classList.add('bg-white', 'shadow');
+                gridBtn.classList.remove('bg-white', 'shadow');
+            }
+            renderProductList();
+        }
+        
+        // 내 정보 페이지 데이터 채우기
+        app.addEventListener('click', e => {
+            if (e.target.closest('[data-page="my-info"]')) {
+                if (currentUser) {
+                    document.getElementById('my-info-username').textContent = currentUser.username;
+                    document.getElementById('my-info-role').textContent = currentUser.role;
+                }
+            }
+        });
+
+        // --- 앱 시작 ---
+        initialize();
+    });
+    </script>
+</body>
+</html>

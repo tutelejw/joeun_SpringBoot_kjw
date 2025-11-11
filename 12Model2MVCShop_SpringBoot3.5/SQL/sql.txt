@@ -1,0 +1,24 @@
+update product set image_file='123.png';
+
+
+
+
+sqlplus scott/tiger
+
+
+
+COLUMN prod_no FORMAT 99999;
+COLUMN prod_name FORMAT A20;
+COLUMN prod_detail FORMAT A30;
+COLUMN manufacture_day FORMAT A12;
+COLUMN price FORMAT 999,999,999;
+COLUMN image_file FORMAT A30;
+COLUMN reg_date FORMAT A20;
+
+set linesize 1000;
+set pagesize 1000;
+SET AUTOCOMMIT ON;
+
+
+select * from product;
+

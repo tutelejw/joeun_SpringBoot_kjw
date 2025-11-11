@@ -1,11 +1,17 @@
 package com.model2.mvc.web.product;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
@@ -18,6 +24,11 @@ public class ProductRestController {
     @Autowired
     @Qualifier("productServiceImpl")
     private ProductService productService;
+
+    // ===== 추가: 파일 업로드 경로 주입 =====
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+    // ===== 추가 끝 =====
 
     public ProductRestController() {
         System.out.println("==> ProductRestController 생성됨");
@@ -78,23 +89,91 @@ public class ProductRestController {
     }
 
     /**
-     * ✅ 4. 상품 정보 수정
-     * @param product : 수정할 상품 정보 (JSON)
-     * @return 수정 완료된 상품 정보(JSON)
-     * 📌 예제 URL: PUT /product/json/updateProduct
-     * 📌 Content-Type: application/json
-     * {
-     *     "prodNo": 10001,
-     *     "prodName": "iPhone 15 Pro",
-     *     ...
-     * }
+     * ✅ 4-1. 상품 정보 수정 조회 (파일 업로드용 - 멀티파트 폼 방식)
+     * @param prodNo : 상품 번호
+     * @return 해당 상품 정보(JSON)
+     * 📌 예제 URL: GET /product/json/updateProduct/10001
      */
-    @PutMapping("json/updateProduct")
+    @GetMapping("json/updateProduct/{prodNo}")
+    public Product getProductForUpdate(@PathVariable int prodNo) throws Exception {
+        System.out.println("▶ REST:: getProductForUpdate() 호출됨 - prodNo: " + prodNo);
+        return productService.getProduct(prodNo);
+    }
+
+    /**
+     * ✅ 4-2. 상품 정보 수정 (파일 업로드 포함)
+     * @param product : 수정할 상품 정보
+     * @param uploadFile : 업로드할 파일
+     * @return 수정된 상품 정보(JSON)
+     * 📌 예제 URL: POST /product/json/updateProduct
+     * 📌 Content-Type: multipart/form-data
+     * 📌 FormData 형식으로 전송:
+     *    - prodNo: 10001
+     *    - prodName: 수정된 상품명
+     *    - prodDetail: 수정된 상세정보
+     *    - manuDate: 2025-11-11
+     *    - price: 100000
+     *    - uploadFile: (파일)
+     */
+    @PostMapping("json/updateProduct")
+    public Product updateProductWithFile(
+            @ModelAttribute Product product,
+            @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile) throws Exception {
+        
+        System.out.println("▶ REST:: updateProductWithFile() 호출됨 - prodNo: " + product.getProdNo());
+        
+        // 파일 업로드 처리
+        if (uploadFile != null && !uploadFile.isEmpty()) {
+            File uploadDirFile = new File(uploadDir);
+            
+            // 폴더가 없으면 생성
+            if (!uploadDirFile.exists()) {
+                boolean created = uploadDirFile.mkdirs();
+                System.out.println("[Upload] 디렉토리 생성: " + created);
+                System.out.println("[Upload] 경로: " + uploadDirFile.getAbsolutePath());
+            }
+            
+            // 파일명 설정 (원본 파일명 사용)
+            String savedFileName = uploadFile.getOriginalFilename();
+            File dest = new File(uploadDirFile, savedFileName);
+            
+            // 파일 저장
+            uploadFile.transferTo(dest);
+            System.out.println("[Upload] 파일 저장 성공: " + dest.getAbsolutePath());
+            
+            // 로그 파일 기록
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String nowStr = sdf.format(new Date());
+            File logFile = new File(uploadDirFile, "upload_log.txt");
+            try (FileWriter fw = new FileWriter(logFile, true)) {
+                fw.write("Uploaded: " + savedFileName + " at " + nowStr + "\n");
+            }
+            
+            // Product 객체에 파일명 저장
+            product.setFileName(savedFileName);
+        } else {
+            System.out.println("[Upload] 파일 선택 안됨. 기존 파일 유지");
+        }
+        
+        // 상품 정보 업데이트
+        productService.updateProduct(product);
+        
+        // 업데이트된 상품 정보 반환
+        return productService.getProduct(product.getProdNo());
+    }
+
+    /**
+     * ✅ 4-3. 상품 정보 수정 (JSON 방식 - 파일 제외)
+     * @param product : 수정할 상품 정보
+     * @return 수정된 상품 정보(JSON)
+     * 📌 예제 URL: PUT /product/json/updateProductJson
+     * 📌 Content-Type: application/json
+     */
+    @PutMapping("json/updateProductJson")
     public Product updateProduct(@RequestBody Product product) throws Exception {
         System.out.println("▶ REST:: updateProduct() 호출됨 - prodNo: " + product.getProdNo());
-
         productService.updateProduct(product);
-        return product;
+        return productService.getProduct(product.getProdNo());
     }
     
     /**
@@ -116,22 +195,16 @@ public class ProductRestController {
 
         return productService.getProductList(search);
     }
-	// [추가] Autocomplete 요청을 처리하고 JSON 데이터를 반환하는 메서드
+
     /**
-     * 상품명 자동완성 목록을 JSON으로 반환합니다.
-     * @param term jQuery UI Autocomplete가 보내는 검색어 파라미터
-     * @return 상품명 List
-     * @throws Exception
+     * ✅ 6. 상품명 자동완성 목록 조회
+     * @param term : 검색어
+     * @return 상품명 List(JSON)
+     * 📌 예제 URL: GET /product/json/getProductNameList?term=iPhone
      */
- // @RequestMapping(value="getProductNameList", method=RequestMethod.GET) 대신 @GetMapping 사용 가능
     @GetMapping("json/getProductNameList") 
     public List<String> getProductNameList(@RequestParam("term") String term) throws Exception {
-        
-        System.out.println("/product/json/getProductNameList : GET");
-        System.out.println("자동완성 검색어: " + term);
-        
-        // @RestController 클래스에 있으므로 @ResponseBody 어노테이션이 없어도
-        // List<String>이 자동으로 JSON 배열로 변환되어 반환됩니다.
+        System.out.println("▶ REST:: getProductNameList() 호출됨 - term: " + term);
         return productService.getProductNameList(term);
     }
     
