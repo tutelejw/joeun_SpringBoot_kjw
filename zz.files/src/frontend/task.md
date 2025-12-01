@@ -1,0 +1,3 @@
+- [x] `task.md` 생성 <!-- id: 0 -->
+- [x] `청사진.md` (Implementation Plan) 생성 <!-- id: 1 -->
+- [x] `워크스루.md` (Walkthrough) 생성 <!-- id: 2 -->
