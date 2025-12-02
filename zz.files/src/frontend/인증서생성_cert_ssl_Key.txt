@@ -1,0 +1,37 @@
+﻿인증서 키 
+⇒ 목적은 “HTTPS 기반의 Kakao OAuth Redirect를 정상 처리하기 위해서”
+
+
+PowerShell이나 CMD에서:
+keytool -genkeypair ^
+  -alias moa-ssl ^
+  -keyalg RSA ^
+  -keysize 2048 ^
+  -storetype PKCS12 ^
+  -keystore moa-ssl.p12 ^
+  -validity 3650
+
+
+실행 후 만들어진 moa-ssl.p12 파일을:
+4beans-moa/src/main/resources/keystore/moa-ssl.p12
+
+
+이 위치로 옮기면 돼.
+
+
+그 다음 application.properties 에서 설정이 이 경로랑 맞는지 다시 확인:
+spring.ssl.bundle.jks.moa.key-store=classpath:keystore/moa-ssl.p12
+spring.ssl.bundle.jks.moa.key-store-password=너가설정한비번
+spring.ssl.bundle.jks.moa.key-alias=moa-ssl
+
+
+server.ssl.bundle=moa
+server.port=8443
+
+
+
+
+KeyStore는 로컬 서버의 ‘SSL 신원증명’ 역할
+즉, 브라우저에게 “이 로컬 서버는 HTTPS 사용 가능한 서버다”라고 알려주는 역할.
+로컬이라서 정식 신뢰인증서는 아니지만,
+브라우저가 “보안 연결 허용”할 수 있게 해주는 최소조건 충족.

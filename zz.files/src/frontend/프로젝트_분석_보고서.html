@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoA 프로젝트 종합 분석 보고서</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.8;
+            color: #1e293b;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            color: #4f46e5;
+            margin-bottom: 20px;
+            border-bottom: 4px solid #4f46e5;
+            padding-bottom: 15px;
+        }
+        
+        h2 {
+            font-size: 2em;
+            color: #4338ca;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            border-left: 6px solid #4f46e5;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            font-size: 1.5em;
+            color: #3730a3;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            font-size: 1.2em;
+            color: #312e81;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        blockquote {
+            background: #eef2ff;
+            border-left: 4px solid #4f46e5;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .important {
+            background: #fef3c7;
+            border-left-color: #f59e0b;
+        }
+        
+        .note {
+            background: #dbeafe;
+            border-left-color: #3b82f6;
+        }
+        
+        .caution {
+            background: #fee2e2;
+            border-left-color: #ef4444;
+        }
+        
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            color: #f43f5e;
+        }
+        
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        pre code {
+            background: transparent;
+            color: #e2e8f0;
+            padding: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        th {
+            background: #4f46e5;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:hover {
+            background: #f8fafc;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .mermaid {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 30px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        hr {
+            border: none;
+            border-top: 2px solid #e2e8f0;
+            margin: 40px 0;
+        }
+        
+        .meta {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .meta p {
+            margin: 5px 0;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #c7d2fe;
+        }
+        
+        .stat-card h3 {
+            color: #4f46e5;
+            margin: 0 0 10px 0;
+            font-size: 2em;
+        }
+        
+        .stat-card p {
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .checkmark {
+            color: #10b981;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 MoA 프로젝트 종합 분석 보고서</h1>
+        
+        <div class="meta">
+            <p><strong>분석일:</strong> 2025-12-02</p>
+            <p><strong>프로젝트명:</strong> MoA (Subscription Sharing Platform)</p>
+            <p><strong>프로젝트 경로:</strong> <code>c:\kjw_workspace_git\joeun_SpringBoot_kjw\zz.files\src\frontend</code></p>
+        </div>
+
+        <h2>📋 목차</h2>
+        <ol>
+            <li><a href="#overview">프로젝트 개요</a></li>
+            <li><a href="#tech-stack">기술 스택</a></li>
+            <li><a href="#structure">프로젝트 구조</a></li>
+            <li><a href="#database">데이터베이스 설계</a></li>
+            <li><a href="#features">주요 기능</a></li>
+            <li><a href="#components">컴포넌트 분석</a></li>
+            <li><a href="#pages">페이지 구성</a></li>
+            <li><a href="#services">서비스 레이어</a></li>
+            <li><a href="#design">디자인 시스템</a></li>
+            <li><a href="#deployment">배포 및 설정</a></li>
+            <li><a href="#improvements">개선 제안</a></li>
+        </ol>
+
+        <hr>
+
+        <h2 id="overview">1. 프로젝트 개요</h2>
+        
+        <h3>1.1 프로젝트 목표</h3>
+        <p><strong>MoA</strong>는 2030 세대를 타겟으로 한 구독 서비스(OTT 등) 공유 중개 플랫폼입니다.</p>
+        
+        <ul>
+            <li><strong>핵심 컨셉:</strong> "혼자 내면 부담, 같이 내면 반값"</li>
+            <li><strong>주요 가치:</strong> 합리적인 소비, 안전한 공유, 즉시 매칭</li>
+            <li><strong>타겟 사용자:</strong> 트렌드에 민감하고 합리적인 소비를 추구하는 2030 세대</li>
+        </ul>
+
+        <h3>1.2 비즈니스 모델</h3>
+        <div class="mermaid">
+graph LR
+    A[파티장] -->|구독 서비스 제공| B[MoA 플랫폼]
+    C[파티원] -->|월 분담금 결제| B
+    B -->|보증금 관리| D[안전장치]
+    B -->|수수료 15%| E[플랫폼 수익]
+    B -->|정산| A
+        </div>
+
+        <ul>
+            <li><strong>파티장:</strong> 구독 서비스를 보유하고 파티를 생성</li>
+            <li><strong>파티원:</strong> 파티에 참여하여 월 분담금 지불</li>
+            <li><strong>플랫폼:</strong> 중개 역할, 보증금 관리, 자동 정산 (수수료 15%)</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="tech-stack">2. 기술 스택</h2>
+        
+        <h3>2.1 Frontend</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>기술</th>
+                    <th>버전</th>
+                    <th>용도</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>React</strong></td><td>19.2.0</td><td>UI 프레임워크</td></tr>
+                <tr><td><strong>TypeScript</strong></td><td>5.8.2</td><td>타입 안정성</td></tr>
+                <tr><td><strong>React Router DOM</strong></td><td>7.9.6</td><td>클라이언트 사이드 라우팅</td></tr>
+                <tr><td><strong>Vite</strong></td><td>6.2.0</td><td>빌드 도구</td></tr>
+                <tr><td><strong>Tailwind CSS</strong></td><td>CDN</td><td>스타일링</td></tr>
+                <tr><td><strong>D3.js</strong></td><td>7.9.0</td><td>데이터 시각화 (절약 차트)</td></tr>
+                <tr><td><strong>Lucide React</strong></td><td>0.554.0</td><td>아이콘 라이브러리</td></tr>
+                <tr><td><strong>Axios</strong></td><td>1.13.2</td><td>HTTP 클라이언트</td></tr>
+            </tbody>
+        </table>
+
+        <h3>2.2 AI & External Services</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>서비스</th>
+                    <th>용도</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Google Gemini API</strong></td><td>AI 챗봇 어시스턴트</td></tr>
+                <tr><td><strong>Toss Payments</strong></td><td>결제 시스템 (추정)</td></tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <h2 id="database">4. 데이터베이스 설계</h2>
+        
+        <h3>4.1 ERD 개요</h3>
+        <p>데이터베이스는 <strong>18개의 테이블</strong>로 구성되어 있으며, 크게 5개 영역으로 분류됩니다.</p>
+
+        <div class="mermaid">
+graph TB
+    subgraph 회원영역
+        USERS[USERS<br/>회원]
+        OAUTH[OAUTH_ACCOUNT<br/>소셜계정]
+        BLACKLIST[BLACKLIST<br/>블랙리스트]
+    end
+    
+    subgraph 상품영역
+        CATEGORY[CATEGORY<br/>카테고리]
+        PRODUCT[PRODUCT<br/>상품]
+        SUBSCRIPTION[SUBSCRIPTION<br/>구독]
+    end
+    
+    subgraph 파티영역
+        PARTY[PARTY<br/>파티]
+        PARTY_MEMBER[PARTY_MEMBER<br/>파티멤버]
+    end
+    
+    subgraph 결제영역
+        PAYMENT[PAYMENT<br/>결제]
+        DEPOSIT[DEPOSIT<br/>보증금]
+        ACCOUNT[ACCOUNT<br/>계좌]
+        USER_CARD[USER_CARD<br/>카드]
+    end
+    
+    subgraph 정산영역
+        SETTLEMENT[SETTLEMENT<br/>정산]
+        SETTLEMENT_DETAIL[SETTLEMENT_DETAIL<br/>정산상세]
+    end
+    
+    USERS --> OAUTH
+    USERS --> BLACKLIST
+    USERS --> SUBSCRIPTION
+    USERS --> PARTY
+    USERS --> PARTY_MEMBER
+    CATEGORY --> PRODUCT
+    PRODUCT --> SUBSCRIPTION
+    PARTY --> PARTY_MEMBER
+    PARTY --> PAYMENT
+    PARTY --> DEPOSIT
+    PARTY --> SETTLEMENT
+    ACCOUNT --> SETTLEMENT
+        </div>
+
+        <h3>4.2 주요 테이블 상세</h3>
+        
+        <h4>4.2.1 USERS (회원)</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>컬럼명</th>
+                    <th>타입</th>
+                    <th>설명</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>USER_ID</td><td>VARCHAR(50)</td><td>회원 ID (PK)</td></tr>
+                <tr><td>PASSWORD</td><td>VARCHAR(50)</td><td>비밀번호</td></tr>
+                <tr><td>NICKNAME</td><td>VARCHAR(20)</td><td>닉네임</td></tr>
+                <tr><td>PHONE</td><td>VARCHAR(14)</td><td>전화번호</td></tr>
+                <tr><td>ROLE</td><td>VARCHAR(20)</td><td>역할 (USER/ADMIN)</td></tr>
+                <tr><td>USER_STATUS</td><td>VARCHAR(20)</td><td>회원 상태</td></tr>
+                <tr><td>CI/DI</td><td>VARCHAR(100)</td><td>본인인증 정보 (UNIQUE)</td></tr>
+                <tr><td>LOGIN_FAIL_COUNT</td><td>INT</td><td>로그인 실패 횟수</td></tr>
+            </tbody>
+        </table>
+
+        <blockquote class="important">
+            <strong>⚠️ IMPORTANT</strong><br>
+            <strong>CI/DI:</strong> 본인인증 고유값으로 중복 가입 방지<br>
+            <strong>ROLE:</strong> 일반 사용자(USER)와 관리자(ADMIN) 구분
+        </blockquote>
+
+        <hr>
+
+        <h2 id="features">5. 주요 기능</h2>
+        
+        <h3>5.1 사용자 기능</h3>
+        
+        <h4>5.1.1 회원 관리</h4>
+        <ul>
+            <li><span class="checkmark">✅</span> 회원가입 / 로그인</li>
+            <li><span class="checkmark">✅</span> 소셜 로그인 (OAuth 연동)</li>
+            <li><span class="checkmark">✅</span> 본인인증 (PASS 인증)</li>
+            <li><span class="checkmark">✅</span> 프로필 수정</li>
+            <li><span class="checkmark">✅</span> 로그인 실패 잠금 (5회 실패 시)</li>
+        </ul>
+
+        <h4>5.1.2 파티 기능</h4>
+        <ul>
+            <li><span class="checkmark">✅</span> 파티 찾기 (검색 & 필터링)
+                <ul>
+                    <li>서비스명 검색 (Netflix, Disney+, Spotify 등)</li>
+                    <li>카테고리 필터 (Video, Music, Productivity)</li>
+                </ul>
+            </li>
+            <li><span class="checkmark">✅</span> 파티 생성</li>
+            <li><span class="checkmark">✅</span> 파티 참여 / 탈퇴</li>
+            <li><span class="checkmark">✅</span> 파티 상태 관리 (모집중/마감/진행중/종료)</li>
+        </ul>
+
+        <h4>5.1.5 마이페이지</h4>
+        <ul>
+            <li><span class="checkmark">✅</span> 개인화 대시보드
+                <ul>
+                    <li>총 절약 금액 (누적)</li>
+                    <li>다음 결제일 D-Day</li>
+                    <li>참여 중인 파티 수</li>
+                </ul>
+            </li>
+            <li><span class="checkmark">✅</span> 절약 차트 (D3.js)
+                <ul>
+                    <li>일반 구독 vs MoA 이용 시 절약 금액 비교</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>5.1.6 AI 어시스턴트</h4>
+        <ul>
+            <li><span class="checkmark">✅</span> Google Gemini API 연동 챗봇</li>
+            <li><span class="checkmark">✅</span> 2030 세대 맞춤형 친근한 말투</li>
+            <li><span class="checkmark">✅</span> 우측 하단 플로팅 버튼 (FAB)</li>
+        </ul>
+
+        <hr>
+
+        <h2 id="improvements">11. 개선 제안</h2>
+        
+        <h3>11.1 보안 강화</h3>
+        <blockquote class="caution">
+            <strong>🚨 CAUTION - 보안 취약점</strong>
+        </blockquote>
+
+        <ol>
+            <li><strong>OTT 계정 정보 암호화</strong>
+                <ul>
+                    <li>현재: <code>PARTY</code> 테이블에 <code>OTT_PASSWORD</code> 평문 저장 가능성</li>
+                    <li>개선: AES-256 암호화 또는 별도 보안 저장소 사용</li>
+                </ul>
+            </li>
+            <li><strong>환경변수 관리</strong>
+                <ul>
+                    <li>현재: <code>.env.local</code> 파일 사용</li>
+                    <li>개선: <code>.env.example</code> 템플릿 제공, <code>.gitignore</code> 확인</li>
+                </ul>
+            </li>
+            <li><strong>API 키 노출 방지</strong>
+                <ul>
+                    <li>현재: 클라이언트에서 Gemini API 키 직접 사용</li>
+                    <li>개선: 백엔드 프록시를 통한 API 호출</li>
+                </ul>
+            </li>
+        </ol>
+
+        <hr>
+
+        <h2>📊 프로젝트 통계</h2>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3>12</h3>
+                <p>총 페이지</p>
+            </div>
+            <div class="stat-card">
+                <h3>6</h3>
+                <p>컴포넌트</p>
+            </div>
+            <div class="stat-card">
+                <h3>3</h3>
+                <p>서비스</p>
+            </div>
+            <div class="stat-card">
+                <h3>18</h3>
+                <p>데이터베이스 테이블</p>
+            </div>
+            <div class="stat-card">
+                <h3>6</h3>
+                <p>지원 OTT 서비스</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>📝 결론</h2>
+        
+        <p><strong>MoA 프로젝트</strong>는 2030 세대를 위한 구독 공유 플랫폼으로, 다음과 같은 강점을 가지고 있습니다:</p>
+        
+        <ul>
+            <li><span class="checkmark">✅</span> <strong>명확한 타겟:</strong> 합리적 소비를 추구하는 2030 세대</li>
+            <li><span class="checkmark">✅</span> <strong>안전장치:</strong> 보증금 시스템, 블랙리스트 관리</li>
+            <li><span class="checkmark">✅</span> <strong>자동화:</strong> 자동 결제, 자동 정산 (수수료 15%)</li>
+            <li><span class="checkmark">✅</span> <strong>현대적 기술 스택:</strong> React 19, TypeScript, Vite</li>
+            <li><span class="checkmark">✅</span> <strong>AI 통합:</strong> Google Gemini 챗봇 어시스턴트</li>
+            <li><span class="checkmark">✅</span> <strong>트렌디한 디자인:</strong> Blob 애니메이션, 그라디언트, 친근한 UI/UX</li>
+        </ul>
+
+        <blockquote class="note">
+            <strong>💡 개선이 필요한 부분</strong><br>
+            - 보안 강화 (OTT 계정 암호화, API 키 관리)<br>
+            - 성능 최적화 (코드 스플리팅, 캐싱)<br>
+            - 테스트 코드 작성<br>
+            - 접근성 개선
+        </blockquote>
+
+        <p style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%); border-radius: 8px; text-align: center;">
+            전반적으로 <strong style="color: #4f46e5;">잘 설계된 프로젝트</strong>이며, 위의 개선 사항을 반영하면 프로덕션 레벨의 서비스로 발전할 수 있습니다. 🚀
+        </p>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#eef2ff',
+                primaryTextColor: '#1e293b',
+                primaryBorderColor: '#4f46e5',
+                lineColor: '#6366f1',
+                secondaryColor: '#e0e7ff',
+                tertiaryColor: '#f8fafc'
+            }
+        });
+    </script>
+</body>
+</html>
