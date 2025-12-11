@@ -1,0 +1,203 @@
+===========================================
+Linux 는 공부(?) => 정리, 스크립트(사용법 DB화) 하자.(?)
+===========================================
+
+
+
+
+
+1. openJDk 1.8 설치 및 삭제
+
+- sudo : Superuser DO : 일반사용자가 관리자권한 명령 실행
+- apt : Advanced Package Tool : apt-get 의 단점보완 new Version
+
+============================
+: root 계정이동 및 나오기(?)
+: 이후 수업은 root 계정에서 수업함
+sudo -i
+exit
+sudo -i
+============================
+: etc : Linux 는 공부(?) => 정리, 스크립트(사용법 DB화) 하자.(?)
+pwd : Present Work Ddirectory
+cd /
+pwd
+cd root
+pwd
+============================
+
+
+============================
+==> apt 로 리눅스 패키지 저장소 JDK 검색, 설치 및 확인
+
+sudo apt search openjdk   
+또는 
+apt search openjdk-17
+
+sudo apt update
+
+sudo apt install openjdk-17-jdk
+
+java -version
+
+: 어디에 설치 ?
+ls -al /usr/lib/jvm/java-17-openjdk-amd64
+ls -al /usr/lib/jvm/java-17-openjdk-amd64/bin
+
+: path 설정없이 어떻게 실행 ? => java -version
+- which  :  주어진 명령어의 실행 가능한 경로를 찾아주는 명령어, 유틸리티.       
+which java
+which javac
+
+echo $PATH
+echo $CLASSPATH
+ls -al /usr/bin  : 너무 많음 ?
+
+- grep : Global Regular Expression Print  조건에 맞는 내용 찾기.
+ls -al /usr/bin | grep java   : - > 바로가기 ?
+
+ls -al /etc/alternatives/ 
+ls -al /etc/alternatives/  | grep java
+
+==> 확인
+java
+javac
+
+
+
+
+
+===============================================
+2. Java App. 만들어보기 : VI 편집기 사용. 
+
+==> 작업할 workspace 만들기
+pwd 
+cd /
+pwd
+mkdir workspace
+cd work    :==> TAB 눌러보자 : 잘 사용하자...
+pwd
+ls -al
+
+############################################
+####### VI : Visual : vi 편집기 는 반드시 사용함 #######
+
+==> VI 편집기 사용 : 명령모드 / 라인 명령모드 사용
+vi Use_vi.txt
+==> 지금 모이는 화면 : 명령모드 
+==> 라인 명령모드 이동 [ : ]
+:q
+ls -al  ==> 저장되지 않음 확인
+
+
+==> vi 편집기 사용 : 명령모드 / 라인 명령모드 / 편집모드 사용
+vi Use_vi.txt
+==> 편집 모드 이동 : i : insert
+Hello vi editor , 안녕 브아이 편집기
+==> 명령모드 이동 [ esc ]
+==> 라인 명령모드 이동 [ : ]
+:w
+:q
+ls  -al ==> 저장된 것 확인.
+cat Use_vi.txt      :==> concaternate 해서 보여주기
+
+
+
+==> vi 편집기 사용 : 명령모드 / 라인 명령모드 / 편집모드 사용
+==> HelloApp.java 코딩, 컴파일, 실행
+vi HelloApp.java
+
+==> 라인모드 이동 [ : ]
+:set number    :==> 라인수 나오게 하기.
+==> 편집모드이동 : i : insert
+i
+===>  "Hello Java" 출력 하게 만들기  <==
+
+==> 코딩 후 명령모드 이동 [ esc ]
+==> 라인명령모드 이동 [ : ]
+==> 저장하고 나오기
+:wq 
+
+==> 콘솔에서 저장된 내용 확인 :==> cat
+cat HelloApp.java
+
+javac HelloApp.java
+ls -al
+java HelloApp
+
+
+
+==> vi 편집기 사용 : 명령모드 / 라인 명령모드 / 편집모드 사용
+==> HelloApp.java 편집 :=>  "안녕 자바" 추가 출력 하게 만들기
+vi HelloApp.java   :==> 편집 , 추가후후
+
+javac HelloApp.java
+ls -al
+java HelloApp
+
+
+
+
+
+===============================================
+3. 파일 생성, 복사, 삭제(주의, 주의 , 주의 , 주의 , 주의 , 주의)
+
+- rm fileName 
+- rm -r directoryName  : -r => 모든 디렉토리 및 파일 지운다. 주의, 주의
+- cat fileName  : 파일 내용보기
+- cat > fileName : 파일 만들기(?)
+
+
+==> 파일과 디렉토리 지워보기
+ls -al
+rm Use_vi.txt
+ls -al
+mkdir test_directory
+ls -al
+rm test_directory  => ??????
+rm -r test_directory
+ls -al
+
+
+: 복사, 다른이름 복사, 삭제
+mkdir test_directory
+ls -al
+cp HelloApp.java ./test_directory/
+ls -al
+ls -al ./test_directory/
+cp HelloApp.java ./test_directory/abc.txt
+ls -al ./test_directory/
+rm ./test_directory/HelloApp.java
+ls -al ./test_directory/
+rm -r ./test_directory/
+ls -al
+cp HelloApp.java CopyTest.java
+ls -al
+cat CopyTest.java
+cat  MakeTest.java   : ??????
+cat  > MakeTest.java  
+아무거나 입력
+Ctrl+D
+cat MakeTest.java
+vi MakeTest.java
+
+
+
+
+
+===============================================
+3. N/W 및 IP 관련
+
+- curl ifconfig.me   :==> client URL
+- curl ipinfo.io/ip
+- curl icanhazip.com
+
+- ip addr show
+
+- ping : 네트워크 통신을 테스트하고 상대방 호스트에 대한 응답 시간을 측정하는 명령줄 도구
+           : ICMP (Internet Control Message Protocol) 패킷을 사용하여 호스트 간 통신을 확인
+ping google.com
+ping daum.net
+ping naver.net
+ping localhost
+ping 127.0.0.1

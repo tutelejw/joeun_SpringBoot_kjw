@@ -1,0 +1,104 @@
+====================================================
+==> 한글 관련 : show variables like 'char%';
+==> 5.x 는 utf8 로 변경 필요 
+=====================================================
+
+
+1) Database(Schema) 만들기 
+
+CREATE DATABASE test_db;
+SHOW DATABASES;
+DROP DATABASE test_db;
+SHOW DATABASES;
+
+
+CREATE DATABASE test_db;
+SHOW DATABASES;
+
+USE test_db;
+SHOW TABLES;
+
+
+
+1)  DDL / DDL 사용하기
+
+==> TABLE CREATE
+CREATE TABLE product(
+ p_name       VARCHAR(20),
+ p_price        INT
+);
+
+==> TABLE 구조desc 확인
+DESC product;
+
+==> TABLE 삭제
+DROP TABLE product;
+
+==> TABLE CREATE
+CREATE TABLE product(
+ p_name       VARCHAR(20),
+ p_price         INT	     
+);
+
+==> TABLE 구조 확인
+DESC product;
+
+
+==>TABLE DATA 입력
+INSERT INTO product VALUES('jdbc book',20000);
+INSERT INTO product VALUES('프린터',100000);
+
+
+==>data 조회
+SELECT * FROM product;
+
+
+==> DATA  입력, 수정, 삭제  ROLLBACK 확인
+INSERT INTO product VALUES('servlet book',5000);
+
+SELECT * FROM product;
+
+UPDATE product SET p_price=10000 WHERE p_name='servlet book';
+
+SELECT * FROM product;
+
+
+==> 작업 취소 및 확인 (?????)
+ROLLBACK;
+SELECT * FROM product;
+
+
+=====================================
+=> MySQL : auto-commit
+=> Transaction 처리
+START TRANSACTION;
+-- 여러 개의 SQL 문장 실행
+COMMIT;
+OR 
+ROLLBACK;
+==>필요
+=====================================
+
+
+==> Tranaction 처리 확인 <하나>
+START TRANSACTION;
+UPDATE product SET p_price=5000 WHERE p_name='servlet book';
+SELECT * FROM product;
+ROLLBACK;
+SELECT * FROM product;
+
+
+==> Tranaction 처리 확인.<두울>
+==> START TRANSACTION 은 일회성 확인
+INSERT INTO product VALUES('JDBC book',5000);
+
+SELECT * FROM product;
+
+ROLLBACK;
+
+SELECT * FROM product;
+
+
+==> START TRANSACTION 은 일회성 확인
+==> MySQL 은 TRANSACTION. 처리시 반드시 
+==> START TRANSACTION 시작.

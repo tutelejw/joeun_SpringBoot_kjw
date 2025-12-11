@@ -1,0 +1,12 @@
+
+1. pom.xml 추가 : ROOT.war 로 war 파일이름 변경
+
+    <!-- ROOT.war 로 deployment -->
+    <finalName>ROOT</finalName>
+
+
+2. Deployment
+
+-  java -jar ROOT.war
+- [TocmatHoem] / webapps 에 copy
+

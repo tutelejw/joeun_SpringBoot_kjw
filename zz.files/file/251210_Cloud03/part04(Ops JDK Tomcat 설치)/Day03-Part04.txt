@@ -1,0 +1,120 @@
+===========================================
+Linux 는 공부(?) => 정리, 스크립트(사용법 DB화) 하자.(?)
+===========================================
+
+
+===========================================
+1. openJDk 17 설치 및 ROOT.war (내장 Tomcat) : server  구동
+
+- sudo : Superuser DO : 일반사용자가 관리자권한 명령 실행
+- apt : Advanced Package Tool : apt-get 의 단점보완 new Version
+
+============================
+: root 계정이동 및 나오기(?)
+: 이후 수업은 root 계정에서 수업함
+sudo -i
+============================
+==> apt 로 리눅스 패키지 저장소 JDK 검색, 설치 및 확인
+
+sudo apt search openjdk   
+또는 
+apt search openjdk-17
+
+sudo apt update
+
+sudo apt install openjdk-17-jdk
+
+java -version
+java
+javac
+
+
+============================
+==> ROOT.war : Linux 에서 실행
+==> ROOT.war copy : MobaXterm 사용.
+
+: copy 확인
+ls /home/ubuntu
+: ROOT.war  ==> /opt 로 copy
+cp /home/ubuntu/ROOT.war /opt
+: copy 확인
+ls /opt
+: 이동 및 실행
+cd /opt
+java -jar ROOT.war
+
+: 브라우저 확인 : http://ip:8080  ==> OK
+
+
+
+
+
+
+
+
+===========================================
+2. Tomcat  설치 
+----------------------------------------------
+sudo apt search mysql-server
+또는 
+apt show mysql-server
+----------------------------------------------
+sudo apt search tomcat
+또는 
+apt show tomcat
+----------------------------------------------
+
+
+==> apt 를 사용하지 않고 설치 함. : 
+: /opt directory : Linux 사용시 일반적으로 server 설치함.
+: wget : World Wide Web get : DownLoad 할때 사용
+
+: 이동 및 다운로드
+cd /opt
+sudo wget https://archive.apache.org/dist/tomcat/tomcat-10/v10.1.44/bin/apache-tomcat-10.1.44.tar.gz
+
+: 확인
+ls
+
+:: 압축풀기
+sudo tar -xvf apache-tomcat-10.1.44.tar.gz
+:확인
+ls
+
+:: 실행 화일 권한 변경
+cd /opt/apache-tomcat-10.1.44/bin/
+ls -al
+sudo chmod +x *.sh
+
+:: Tomcat 실행 및 종료
+./startup.sh    
+브라우저 확인 : http://ip:8080   ==> OK
+./shutdown.sh
+브라우저 확인 : http://ip:8080   ==> NG
+==> startup.sh 는 백그라운드 : daemon 방식 실행됨.
+
+:: Tomcat Foreground 실행
+./catalina.sh run
+브라우저 확인 : http://ip:8080   ==> OK
+Ctrl+C
+브라우저 확인 : http://ip:8080   ==> NG
+
+
+::배포 
+==> 기존 ROOT 지우기
+ls /opt/apache-tomcat-10.1.44/webapps
+sudo rm -rf /opt/apache-tomcat-10.1.44/webapps/ROOT
+ls /opt/apache-tomcat-10.1.44/webapps
+
+:: copy  ROOT.war
+sudo cp /home/ubuntu/ROOT.war /opt/apache-tomcat-10.1.44/webapps/
+ls /opt/apache-tomcat-10.1.44/webapps/
+
+:: Tocamt Foreground 재시작
+./catalina.sh run
+브라우저 확인 : http://ip:8080 ==> OK
+
+==> 서버 연결 콘솔 하나더 오픈...
+:: 확인
+ls /opt/apache-tomcat-10.1.44/webapps/            ==> 권한 ERROR
+sudo ls /opt/apache-tomcat-10.1.44/webapps/   ==>  ROOT 권한 sudo

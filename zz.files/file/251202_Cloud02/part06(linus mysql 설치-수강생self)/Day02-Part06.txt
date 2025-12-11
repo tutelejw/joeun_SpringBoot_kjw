@@ -1,0 +1,179 @@
+===========================================
+Linux 는 공부(?) => 정리, 스크립트(사용법 DB화) 하자.(?)
+===========================================
+
+1. ubuntu 에 mysql 설치
+
+2. root 로그인  scott / tiger 계정생성
+
+3.  scott / tiger  계정 로그인 table 만들고 data insert
+
+4. win 에서 설치한 workbench 로 Linux 에 설치한 mysql 접속  
+    : ubuntu 에 공인 IP 있음.
+
+5. ConnectionTest02.java   
+5.1  window 에서 실행 
+5.2 ubuntu server 로 copy 실행
+: driver copy
+: java ConnectionTest02.java
+: javac -cp .:~~.jar ConnectionTest02
+
+
+
+
+
+===============================
+:==>  Ubuntu Server 24.04 LTS
+:==>  mysql-installer-community-8.0.33.0 : 설치하기
+===============================
+
+
+
+0. root 계정 / 패키지 업데이트
+sudo -i 
+sudo apt update  //=> sudo apt upgrade -y
+sudo apt search mysql-server
+또는 
+apt show mysql-server
+
+
+
+1. 설치
+sudo apt install mysql-server   //==> sudo apt install mysql-server -y
+
+: mysql 접속 및 비밀번호 설정
+:: sudo mysql
+
+:: ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+:: FLUSH PRIVILEGES;
+:: exit;
+
+:: 다시 로그인 
+:: mysql -u root -p
+
+
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+-- Test 용 DataBase 구성 및 Table 구성 -------------------------------
+
+1) Database(Schema) 만들기 
+
+CREATE DATABASE test_db;
+SHOW DATABASES;
+
+USE test_db;
+SHOW TABLES;
+
+
+2)  DDL / DDL 사용하기
+
+==> TABLE CREATE
+CREATE TABLE product(
+ p_name       VARCHAR(20),
+ p_price        INT
+);
+
+==> TABLE 구조desc 확인
+DESC product;
+
+
+==>TABLE DATA 입력
+INSERT INTO product VALUES('jdbc book',20000);
+INSERT INTO product VALUES('프린터',100000);
+
+
+==>data 조회
+SELECT * FROM product;
+
+-- Test 용 DataBase 구성 및 Table 구성 -------------------------------
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+
+
+
+2. scott / tiger 계정을 들고 접속 권한 부여.
+
+CREATE USER 'scott'@'%'  IDENTIFIED BY 'tiger';
+
+=> scott / tiger 계정은 어디든 접속하며 [test_db] 데이터베이스의 모든 권한 줌. 
+GRANT ALL PRIVILEGES ON test_db.* to 'scott'@'%';
+
+exit
+
+mysql -u scott -p
+
+USE test_db;
+SHOW TABLES;
+SELECT * FROM product;
+
+
+
+3. Window MySQL Workbench 에서 접속 EC2 mysql 접속
+
+: 52.79.49.156
+: scott /tiger 
+: 접속안됨 ?????  //==> 보안그룹:ACL Port 확인 : OK
+
+
+?????????????????????????????????????
+::==> mysql 기본 설정 : 127.0.0.1 로 되어 있음 변경 필요
+
+:: 기본 설정을 127.0.0.1 ==> 0.0.0.0 변경
+ls /etc/mysql/mysql.conf.d/
+
+vi /etc/mysql/mysql.conf.d/mysqld.cnf
+
+==> 라인명령모드로 이동
+: set number
+==> 31번 라인으로 이동
+==> bind-address = 127.0.0.1 : 변경 : bind-address = 0.0.0.0
+==> 편집모드 이동
+i 
+==> 변경합니다.
+==> 명령모드로 이동
+ESC 
+==> 라인 명령모드로 이동
+:wq
+
+==> 변경된것 확인
+cat /etc/mysql/mysql.conf.d/mysqld.cnf 
+==> 많아요 : 필요한 것만 봅시다.
+cat /etc/mysql/mysql.conf.d/mysqld.cnf |  grep  bind-address
+
+==> mysql 재구동
+sudo systemctl restart mysql
+?????????????????????????????????????
+
+
+==>다시 Window MySQL Workbench 에서 접속 EC2 mysql 접속
+: 52.79.49.156
+: scott /tiger 
+
+:: USE test_db
+:: SELECT * FROM product;
+
+
+
+5. ConnectionTest02.java 확인 TEST
+
+5.1 windows 에서 컴파일 실행 : 공인 IP 수정
+javac -encoding UTF-8 ConnectionTest02.java 
+java ConnectionTest02
+
+5.2 Linux 에서 컴파일 실행 : 공인 IP / local IP 수정
+: ConnectionTest02.java / mysql-connector-j-8.0.33.jar  : linux copy 
+: copy /home/ubuntu/
+
+: /root 로 copy 
+cp /home/ubuntu/ConnectionTest02.java /home/ubuntu/mysql-connector-j-8.0.33.jar /root
+ls -al
+
+==> 확인 : 공인 IP
+vi ConnectionTest02.java
+javac ConnectionTest02.java
+java  -cp .:mysql-connector-j-8.0.33.jar ConnectionTest02
+
+==> 확인 : 공인 10.0.0.70 로변경
+vi ConnectionTest02.java
+javac ConnectionTest02.java
+java  -cp .:mysql-connector-j-8.0.33.jar ConnectionTest02

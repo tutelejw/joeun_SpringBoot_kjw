@@ -1,0 +1,117 @@
+=================================================================
+== AWS Identifier Naming Rules  정의
+=================================================================
+1. VPC : [ProjectName]-vpc
+
+2. Subnet : [ProjectName]-subnet-[용도]-[public|private]-[zone]
+
+3. EC2 : [ProjectName]-[설치]-[public|private]-[zone]
+
+4. NACL  //==> AWS 미적용 ?
+
+5. SG(보안그룹, ACL) : [ProjectName]-sg-[설치]
+
+6.IGW  : [ProjectName]-igw
+
+7. NAT GATEWAY : [ProjectName]-ngw-[zone]
+
+8.Routing Table : [ProjectName]-rt-[public|private]-[zone]
+
+
+
+=================================================================
+==> 실습용 : VPC 구성 : Data Center 만들기 ?
+==> VPC 
+==> Subnet : public 용만 : zone-2a 만 구성 : 가용성 고려는 Project 에 적용
+==> Routing Table
+==> IGW
+==> SG : ICMP 22 80 443 3306 1521
+==> EC2 
+==> NAT Gateway 는 구성 않음 : 비용 및 private 구성은 Project 에 적용
+=================================================================
+
+1. VPC : [ProjectName]-vpc
+- test-vpc : 10.0.0.0/16
+
+
+
+2. Subnet : [ProjectName]-subnet-[용도]-[public|private]-[zone]
+- test-subnet-was-pub-2a
+  10.0.0.0/24                     
+
+
+3.Routing Table : [ProjectName]-rt-[public|private]-[zone]
+- test-rt-pub-2a
+==> 각각의 라우팅 : 각각 subnet 연결 
+==> 각각의 라우팅/라우팅 편집 : 10.0.0.0/16 통신 가능확인
+
+
+4.IGW  : [ProjectName]-igw
+- test-igw
+==> 사용할 VPC 연결 : 작업에서 VPC 연결 : test-vpc 와 연결
+
+
+5. Routing Table 편집 : public subnet IGW 연결 
+- test-rt-pub-2a
+0.0.0.0/0           IGW 연결           
+
+
+6. SG(보안그룹, ACL) : [ProjectName]-sg-[설치]
+- test-sg-study  : 설명 : ICMP, 22, 80, 443, db-port 3306, 1521 
+==> 생성후 name 보안그룹이름으로 편집
+==> 인바운드 편집 : ICMP, 22, 80, 443, db-port 3306, 1521 
+==> 아웃바운드 : default all open 사용
+
+
+7. EC2 구성 : public subnet 1EA 구성
+
+========================================
+==> 탄력적 IP : 공인 IP
+==> 공인 IP 미리 받자 : 3.39.59.124 (자신이 받은것으로 변경)
+==> 할당할 EC2 서버 이름 정하자.: 
+==> 아래 EC2 이름 : test-study-pub-2a  할당
+========================================
+
+==> 실습용 >>> EC2  만들기(?) : 이름 : test-study-pub-2a <===
+==> 인스턴스 : 인스턴스시작 
+: 이름 및 태크 :  test-study-pub-2a
+
+: 애플리케이션 및 OS 이미지  
+:: Quick Start : Ubuntu : Ubuntu Server 24.04 LTS : free
+:: x86 : 사용자이름 : ubuntu
+
+: 인스턴스 유형 : t2.large : No Free
+
+: 키페어(로그인) : 기존 만든 것 사용
+:: 251128-test : .pem 
+
+: 네트워크 설정 : 편집
+::VPC : test-vpc
+::서브넷 : test-subnet-was-pub-2a
+::퍼브릭IP 자동할당 : 비활성
+::방화벽(보안그룹) : 기존보안그룹 : test-sg-study
+:: 고급네트워크 구성 
+::기본IP : 10.0.0.70
+
+====================================
+==> 공인 IP 미리 받자 : 이유 IP 고정
+       3.36.79.13 (자신이 받은것) : test-study-pub-2a
+==> 고정IP 할당 : 탄력적 IP : ip 선택 : 작업 : ip 주소연결 : 인스턴스 
+==> 인스턴스에서 공인 IP 할당 확인하자.
+====================================
+
+
+
+
+================================================
+==>1. 연결 확인 :=> EC2 : public subnet 1EA
+Tool : mobaxterm 사용
+: 상단 session : new session
+:: ssh 선택
+:: Remote host : 3.36.79.13   specify username : ubuntu
+:: Advanced SSH setting :use private key : ~~~.pem
+- OK : 접속 OK..
+
+==>2.연결 확인
+ping  www.google.com  
+================================================

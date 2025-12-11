@@ -1,0 +1,211 @@
+=================================================================
+==> AWS Identifier Naming Rules
+=================================================================
+==> ProjectName => test
+=================================================================
+
+# VPC : Virtural Private Cloud : 가상 IDC
+1. VPC : [ProjectName]-vpc
+- test-vpc
+
+
+# Subnet : IDC 의  Zone(위치: 서울, 대전) 의 건물 의 층(?) 또는 방(?)
+# Public  Subnet : IGW 연결됨
+# private Subnet : IGW 연결 안됨
+2. Subnet : [ProjectName]-subnet-[용도]-[public|private]-[zone]
+- test-subnet-was-pub-2a       - test-subnet-was-pub-2c 
+@@@@@@@@@@@ 이번 실습에서 제외
+- test-subnet-rdb-pri-2a          - test-subnet-rdb-pri-2c
+@@@@@@@@@@@ 이번 실습에서 제외
+
+
+
+# EC2 : Elastic Cloud Computer : OS 가 설치된 HW
+3. EC2 : [ProjectName]-[설치]-[public|private]-[zone]
+- test-was-pub-2a       - test-was-pub-2c <== @@@@@@@@@@@ 이번 실습에서 제외
+@@@@@@@@@@@ 이번 실습에서 제외
+- test-rdb-pri-2a          - test-rdb-pri-2c
+@@@@@@@@@@@ 이번 실습에서 제외
+
+
+
+# NACL : Network Access Control List : subnet 방화벽(?)
+4. NACL  //==> AWS 미적용 ?
+
+
+
+# ACL : Access Control List : EC2 방화벽(?) : 보안그룹
+5. SG(보안그룹, ACL) : [ProjectName]-sg-[설치]
+- test-sg-was  (ICMP, 22, 80, 443, 이부분 추가 8000~8999 )
+###################################################
+##### 실습용 port 추가 : 8000 - 8999
+###################################################
+@@@@@@@@@@@ 이번 실습에서 제외
+- test-sg-rdb (ICMP, 22, db-port 3306, 1521 )
+@@@@@@@@@@@ 이번 실습에서 제외
+
+
+
+# IGW : Internet Gate Way : IDC 외부로 인터넷 연결 문(?)
+6.IGW  : [ProjectName]-igw
+- test-igw
+
+
+
+@@@@@@@@@@@ 이번 실습에서 제외
+# Nat Gateway :  공인 IP 없는 private subnet 외부 단방향 연결(밖으로만...??)
+7. NAT GATEWAY : [ProjectName]-ngw-[zone]
+- test-ngw-2a           - test-ngw-2c
+@@@@@@@@@@@ 이번 실습에서 제외
+
+
+
+# Routing Table :  분배기 ?? : 길 안내표 ??? 
+8.Routing Table : [ProjectName]-rt-[public|private]-[zone]
+- test-rt-pub-2a                - test-rt-pub-2c
+@@@@@@@@@@@ 이번 실습에서 제외
+- test-rt-pri-2a                  - test-rt-pri-2c
+@@@@@@@@@@@ 이번 실습에서 제외
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=================================================================
+==> 실습 1> 
+===> test-vpc / zone : 2a / subnet : 2ea : public, private 
+===> ACL : 2ea : was, rdb / EC2 : 2ea  : was , rdb 
+===> Routing Table : 2ea : was, rdb
+===> IGW : 1ea  / NGW : 1ea
+=================================================================
+
+
+
+=======> zone_2a 에서 구성완료 <=======
+# Region : 지역 
+0. Region : 서울 : ap-northeast-2
+
+
+
+=======> zone_2a 에서 구성완료 <=======
+# VPC : Virtural Private Cloud : 가상 IDC
+1. VPC : [ProjectName]-vpc
+- test-vpc : 10.0.0.0/16
+
+
+
+# Region : 서울 : ap-northeast-2
+# Subnet 구성시 : Zone( 위치: 일산, 분당 ? 건물 설치 위치 ? ) 선택 함 
+# Subnet : IDC   2a Zone 의 건물 의 층(?) 또는 방(?)
+2. Subnet : [ProjectName]-subnet-[용도]-[public|private]-[zone]
+- test-subnet-was-pub-2c 
+  10.0.1.0/24                      
+
+
+
+# Routing Table :  분배기 ?? : 길 안내표 ??? 
+3.Routing Table : [ProjectName]-rt-[public|private]-[zone]
+------- default 제공 라우팅 테이블은 사용하지 않는다. ------
+- test-rt-pub-2c               
+
+
+==> 각각의 라우팅 : 각각 subnet 연결 
+: test-rt-pub-2c 선택 : 하부 서브넷연결 : 서브넷열결편집 : test-subnet-was-pub-2c
+
+
+==> 각각의 라우팅 : 10.0.0.0/16 통신 가능확인
+: test-rt-pub-2c 선택 : 하부 라우팅  
+
+
+
+
+=======> zone_2a 에서 구성완료 <=======
+# IGW : Internet Gate Way : IDC 외부로 인터넷 연결 문(?)
+4.IGW  : [ProjectName]-igw
+- test-igw
+
+==> 사용할 VPC 연결 : 
+: test-igw 선택 : 작업 :  VPC 연결 : test-vpc 와 연결
+
+
+
+5. Routing Table 편집 : public subnet IGW 연결 
+: test-rt-pub-2c 선택 : 하부 라우팅 : 라우팅 편집
+:: 라우팅 추가 
+::: 0.0.0.0/0   인터넷케이트웨이 : test-igw 
+==> 확인 : test-rt-pub-2c 선택 : 하부 라우팅 
+==> 0.0.0.0/0 igw 
+==> 10.0.0.0/16 local
+------------------------------------------
+-- 중요 , 중요 개념
+------------------------------------------
+IGW 와 연결된 subnet 은 Public Subent       :  test-subnet-was-pub-2c
+IGW 와 연결 안된 subnet 은 Private Subent  :  test-subnet-rdb-pri-2c
+------------------------------------------
+
+
+
+=======> zone_2a 에서 구성완료 <=======
+# ACL : Access Control List : EC2 방화벽(?) : 보안그룹
+## 참조 : ICMP : Internet Control Message Protocol : ping ???
+#### 예>  ping www.google.com /  ping www.daum.net  
+#### window default 4회 / linux 무한반복
+6. SG(보안그룹, ACL) : [ProjectName]-sg-[설치]
+
+------- default 제공 라우팅 테이블은 사용하지 않는다. ------
+
+- test-sg-was  : 설명 : ICMP, 22, 80, 443
+==> 생성후 name 보안그룹이름으로 편집
+==> 인바운드규칙 설정 : 들어오는(?) 설정
+: test-sg-was 선택 : 아래 인바운드 : 인바운드 규칙 편집
+:: 규칙 추가 4ea : 도든ICMP, 22, 80, 443 : 대상 : anyway IPv4 0.0.0.0/0 
+==> 아웃바운드규칙 설정 : 나가는(?) 설정
+: test-sg-was 선택 : 아래 아웃바운드 : 다 나가는 것 확인만
+
+
+
+@@@@@@@@@@@ 이번 실습에서 제외
+# EC2 : Elastic Cloud Computer : OS 가 설치된 HW
+7. EC2 구성 : public subnet / private subnet 에 1ea 씩 만들기(?)
+
+
+####################################################
+================================================
+==> IDC 삭제(?) : 지금까지 모든 작업 삭제 : 역순으로...===
+================================================
+####################################################

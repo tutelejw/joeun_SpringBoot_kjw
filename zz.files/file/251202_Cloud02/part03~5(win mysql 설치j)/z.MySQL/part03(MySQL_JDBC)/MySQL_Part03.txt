@@ -1,0 +1,51 @@
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+>>>>>>>>>>>> MySQL 은 계정생성시 접속 IP 를 구분한다. 
+>> 계정 생성시 접속 IP 를 지정한다.
+>>CREATE USER '계정'@'호스트'  IDENTIFIED BY '암호';
+>>CREATE USER 'scott'@'localhost'  IDENTIFIED BY 'tiger';
+
+
+>>>>>>>>>>>> 권한 설정시도 지정 할수 있다.
+>>GRANT ALL PRIVILEGES ON 데이타베이스이름.* TO '계정'@'%' IDENTIFIED BY '암호';
+>>GRANT ALL PRIVILEGES ON test_db.* TO 'scott'@'localhost' IDENTIFIED BY 'tiger';
+
+==> 예>>>> 특정IP 대역대 허용
+>GRANT ALL PRIVILEGES ON *.* TO 'scott'@'172.10.0.%' IDENTIFIED BY '패스워드';
+==>모든 IP 허용
+>GRANT ALL PRIVILEGES ON *.* TO 'scott'@'%' IDENTIFIED BY '패스워드';
+==>특정 IP 허용
+>GRANT ALL PRIVILEGES ON test.* TO 'scott'@'192.168.0.175';
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+1. root / root 계정을 모든 IP 에서 접근가능 변경(????).
+>> 보안상 추천하지 않음.
+==>GRANT ALL PRIVILEGES ON test_db.* to 'root'@'%';
+
+
+2. scott / tiger 계정을 들고 접속 권한 부여.
+
+CREATE USER 'scott'@'%'  IDENTIFIED BY 'tiger';
+
+=> scott / tiger 계정은 어디든 접속하며 [test_db] 데이터베이스의 모든 권한 줌. 
+GRANT ALL PRIVILEGES ON test_db.* to 'scott'@'%';
+
+
+===========================================
+==> ConnectionTest02 / workbench 에서 확인하자.
+==> 1. localhost 로 접속하기
+==> 2. 192.168.0.175로 접속하기
+===========================================
+
+
+==========================================================
+=> Console 에서 확인하고 싶다면...
+==========================================================
+set PATH="C:\Program Files\MySQL\MySQL Server 8.0\bin";%PATH%
+mysql -u scott -p
+==========================================================

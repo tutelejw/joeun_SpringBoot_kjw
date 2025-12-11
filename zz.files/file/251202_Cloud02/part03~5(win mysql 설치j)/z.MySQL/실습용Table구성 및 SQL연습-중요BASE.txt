@@ -1,0 +1,140 @@
+//==========================================//
+//=============   SQL Review  =================//
+//==========================================//
+
+1) DDL(Data Definition Language)
+
+==> TABLE CREATE
+CREATE TABLE product(
+ p_name       VARCHAR(20),
+ p_price        INT
+);
+
+==> TABLE 구조 확인
+DESC product;
+
+==> TABLE 삭제
+DROP TABLE product;
+
+
+
+
+2)DML(Data Manipulation Language)
+
+==> TABLE CREATE
+CREATE TABLE product(
+ p_name       VARCHAR2(20),
+ p_price	        NUMBER
+);
+
+==> TABLE 구조 확인
+DESC product;
+
+
+==>TABLE DATA 입력
+INSERT INTO product VALUES('jdbc book',20000);
+INSERT INTO product VALUES('프린터',100000);
+
+==>data 조회
+SELECT * FROM PRODUCT;
+
+
+
+
+2)TCL(Transaction Control Language)
+
+==>작업 저장(?)
+COMMIT;
+
+
+==> DATA  입력, 수정, 삭제  ROLLBACK 확인
+INSERT INTO product VALUES('servlet book',5000);
+
+SELECT * FROM product;
+
+UPDATE product SET p_price=10000 WHERE p_name='servlet book';
+
+SELECT * FROM product;
+
+
+==> 작업 취소(?) 및 확인
+ROLLBACK;
+SELECT * FROM product;
+
+
+==> DATA  입력, 수정, 삭제  COMMIT 확인
+
+INSERT INTO product VALUES('servlet book',5000);
+
+SELECT * FROM product;
+
+UPDATE product SET p_price=10000 WHERE p_name='servlet book';
+
+SELECT * FROM product;
+
+SELECT * FROM product WHERE p_price=10000;
+
+==>작업 저장(?)및 확인
+COMMIT;
+
+
+
+==>DATA DELETE 및 COMMIT
+
+DELETE product WHERE p_name='servlet book';
+
+SELECT * FROM product;
+
+COMMIT;
+
+
+
+is not allowed to connect tho this mysql server  검색함.
+//=> IP 설정 연결
+https://java119.tistory.com/61
+https://blog.naver.com/dltkdgur1026/223000217372
+
+https://ndolson.com/1787
+
+create database test
+
+use test
+
+
+DB 접속 후 현재 설정 확인.
+
+select Host,User,plugin,authentication_string FROM mysql.user;
+
+
+모든 IP 허용
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '패스워드';
+ 
+
+ 
+
+IP 대역대 허용
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'172.10.0.%' IDENTIFIED BY '패스워드';
+ 
+
+
+특정 IP 허용
+
+GRANT ALL PRIVILEGES ON test.* TO 'root'@'192.168.219.106';
+
+
+IP 허용 후 원래 상태로 되돌리기
+
+DELETE FROM mysql.user WHERE Host='%' AND User='아이디';
+FLUSH PRIVILEGES;
+
+
+
+
+CREATE USER 'scott'@'localhost'  IDENTIFIED BY 'tiger';
+GRANT ALL PRIVILEGES ON test.* to 'scott'@'localhost';
+
+
+CREATE USER 'scott'@'%'  IDENTIFIED BY 'tiger';
+GRANT ALL PRIVILEGES ON test.* to 'scott'@'%';

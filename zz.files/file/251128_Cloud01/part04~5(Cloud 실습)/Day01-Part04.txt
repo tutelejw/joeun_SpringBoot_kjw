@@ -1,0 +1,396 @@
+=================================================================
+==> AWS Identifier Naming Rules
+=================================================================
+==> ProjectName => test
+=================================================================
+
+# VPC : Virtural Private Cloud : 가상 IDC
+1. VPC : [ProjectName]-vpc
+- test-vpc 10.0.0.0/16
+
+
+# Subnet : IDC 의  Zone(위치: 서울, 대전) 의 건물 의 층(?) 또는 방(?)
+# Public  Subnet : IGW 연결됨
+# private Subnet : IGW 연결 안됨
+2. Sub net : [ProjectName]-subnet-[용도]-[public|private]-[zone]  
+- test-subnet-was-pub-2a  10.0.0.0/24   - test-subnet-was-pub-2c   10.0.1.0/24
+- test-subnet-rdb-pri-2a  10.0.2.0/24   - test-subnet-rdb-pri-2c   10.0.3.0/24
+
+333 라우팅 테이블
+- test-rt-pub-2a   - test-rt-pub-2c 
+- test-rt-pri-2a   - test-rt-pri-2c
+서브넷연결편집 연결
+
+444 인터넷게이트웨이 새성
+# IGW : Internet Gate Way : IDC 외부로 인터넷 연결 문(?)
+6.IGW  : [ProjectName]-igw
+- test-igw
+생성후 우측상단 작업 버튼 - VPC에 연결 - 인터넷 게이트웨이에 연결된
+
+
+
+555 라우팅테이블 연결된
+test-rt-pub-2a 선택 - 라우팅편집 - 0.0.0.0/0 인터넷게이트웨이 선택
+VPC - 리소스맵 확인(연결확인)
+
+
+
+666 보안그룹 생성
+# ACL : Access Control List : EC2 방화벽(?) : 보안그룹
+5. SG(보안그룹, ACL) : [ProjectName]-sg-[설치]
+- test-sg-was  (ICMP, 22, 80, 443 )
+- test-sg-rdb (ICMP, 22, db-port 3306, 1521 )
+
+
+
+777 탄력적IP
+탄력적IP주소 할당 - NAME 지정
+test-was-pub-2a
+16.184.55.253
+
+
+
+# EC2 : Elastic Cloud Computer : OS 가 설치된 HW
+3. EC2 : [ProjectName]-[설치]-[public|private]-[zone]
+- test-was-pub-2a   - test-was-pub-2c 
+- test-rdb-pri-2a   - test-rdb-pri-2c 
+
+
+# NACL : Network Access Control List : subnet 방화벽(?)
+4. NACL  //==> AWS 미적용 ?
+
+
+
+
+
+
+
+
+# Nat Gateway :  공인 IP 없는 private subnet 외부 단방향 연결(밖으로만...??)
+7. NAT GATEWAY : [ProjectName]-ngw-[zone]
+- test-ngw-2a           - test-ngw-2c
+
+
+# Routing Table :  분배기 ?? : 길 안내표 ??? 
+8.Routing Table : [ProjectName]-rt-[public|private]-[zone]
+- test-rt-pub-2a                - test-rt-pub-2c
+- test-rt-pri-2a                  - test-rt-pri-2c
+
+
+
+
+
+=================================================================
+==> 실습 1> 
+===> test-vpc / zone : 2a / subnet : 2ea : public, private 
+===> ACL : 2ea : was, rdb / EC2 : 2ea  : was , rdb 
+===> Routing Table : 2ea : was, rdb
+===> IGW : 1ea  / NGW : 1ea
+=================================================================
+==> CIDR : Classless Inter-Domain Routing 
+https://www.digikey.kr/ko/resources/conversion-calculators/conversion-calculator-number-conversion
+ =================================================================
+
+# Region : 지역 
+0. Region : 서울 : ap-northeast-2
+
+
+
+# VPC : Virtural Private Cloud : 가상 IDC
+1. VPC : [ProjectName]-vpc
+- test-vpc : 10.0.0.0/16
+
+
+
+# Region : 서울 : ap-northeast-2
+# Subnet 구성시 : Zone( 위치: 일산, 분당 ? 건물 설치 위치 ? ) 선택 함 
+# Subnet : IDC   2a Zone 의 건물 의 층(?) 또는 방(?)
+2. Subnet : [ProjectName]-subnet-[용도]-[public|private]-[zone]
+- test-subnet-was-pub-2a 
+  10.0.0.0/24                      
+- test-subnet-rdb-pri-2a   
+  10.0.2.0/24                      
+
+
+
+# Routing Table :  분배기 ?? : 길 안내표 ??? 
+3.Routing Table : [ProjectName]-rt-[public|private]-[zone]
+------- default 제공 라우팅 테이블은 사용하지 않는다. ------
+- test-rt-pub-2a               
+- test-rt-pri-2a                 
+
+==> 각각의 라우팅 : 각각 subnet 연결 
+: test-rt-pub-2a 선택 : 하부 서브넷연결 : 서브넷열결편집 : test-subnet-was-pub-2a
+: test-rt-pri-2a 선택 : 하부 서브넷연결 : 서브넷열결편집 : test-subnet-rdb-pri-2a
+
+==> 각각의 라우팅 : 10.0.0.0/16 통신 가능확인
+: test-rt-pub-2a 선택 : 하부 라우팅  
+: test-rt-pri-2a 선택 : 하부 라우팅  
+
+
+
+# IGW : Internet Gate Way : IDC 외부로 인터넷 연결 문(?)
+4.IGW  : [ProjectName]-igw
+- test-igw
+
+==> 사용할 VPC 연결 : 
+: test-igw 선택 : 작업 :  VPC 연결 : test-vpc 와 연결
+
+
+
+5. Routing Table 편집 : public subnet IGW 연결 
+: test-rt-pub-2a 선택 : 하부 라우팅 : 라우팅 편집
+:: 라우팅 추가 
+::: 0.0.0.0/0   인터넷케이트웨이 : test-igw 
+==> 확인 : test-rt-pub-2a 선택 : 하부 라우팅 
+==> 0.0.0.0/0 igw 
+==> 10.0.0.0/16 local
+------------------------------------------
+-- 중요 , 중요 개념
+------------------------------------------
+IGW 와 연결된 subnet 은 Public Subent       :  test-subnet-was-pub-2a
+IGW 와 연결 안된 subnet 은 Private Subent  :  test-subnet-rdb-pri-2a
+------------------------------------------
+
+
+
+# ACL : Access Control List : EC2 방화벽(?) : 보안그룹
+## 참조 : ICMP : Internet Control Message Protocol : ping ???
+#### 예>  ping www.google.com /  ping www.daum.net  
+#### window default 4회 / linux 무한반복
+6. SG(보안그룹, ACL) : [ProjectName]-sg-[설치]
+
+------- default 제공 라우팅 테이블은 사용하지 않는다. ------
+
+- test-sg-was  : 설명 : ICMP, 22, 80, 443
+==> 생성후 name 보안그룹이름으로 편집
+==> 인바운드규칙 설정 : 들어오는(?) 설정
+: test-sg-was 선택 : 아래 인바운드 : 인바운드 규칙 편집
+:: 규칙 추가 4ea : 도든ICMP, 22, 80, 443 : 대상 : anyway IPv4 0.0.0.0/0 
+==> 아웃바운드규칙 설정 : 나가는(?) 설정
+: test-sg-was 선택 : 아래 아웃바운드 : 다 나가는 것 확인만
+
+- test-sg-rdb  : 설명 : ICMP, 22, db-port 3306, 1521
+==> 생성후 name 보안그룹이름으로 편집
+==> 인바운드규칙 설정 : 들어오는(?) 설정
+: test-sg-rdb 선택 : 아래 인바운드 : 인바운드 규칙 편집
+:: 규칙 추가 4ea : 도든ICMP, 22 ,3306, 1521 : 대상 : anyway IPv4 0.0.0.0/0 
+==> 아웃바운드규칙 설정 : 나가는(?) 설정
+: test-sg-rdb 선택 : 아래 아웃바운드 : 다 나가는 것 확인만
+
+
+
+# EC2 : Elastic Cloud Computer : OS 가 설치된 HW
+7. EC2 구성 : public subnet / private subnet 에 1ea 씩 만들기(?)
+
+========================================
+==> 탄력적 IP : 공인 IP
+==> 공인 IP 미리 받자 : 3.36.79.13 (자신이 받은것으로 변경)
+3.39.183.157
+==> 할당할 EC2 서버 이름 정하자.
+==> 만들 EC2이름으로 할당 : test-was-pub-2a
+========================================
+
+
+==> 1번째>>> EC2  만들기(?) : 이름 : test-was-pub-2a <===
+==> 인스턴스 : 인스턴스시작 
+: 이름 및 태크 :  test-was-pub-2a
+
+: 애플리케이션 및 OS 이미지  
+:: Quick Start : Ubuntu : Ubuntu Server 24.04 LTS : free
+:: x86 : 사용자이름 : ubuntu
+
+: 인스턴스 유형 : t3.micro : free
+
+: 키페어(로그인) : 새 키 페어 생성 
+:: 251118-test : .pem 
+
+: 네트워크 설정 : 편집
+::VPC : test-vpc
+::서브넷 : test-subnet-was-pub-2a
+::퍼브릭IP 자동할당 : 비활성
+::방화벽(보안그룹) : 기존보안그룹 : test-sg-was
+:: 고급네트워크 구성 
+::기본IP : 10.0.0.10
+
+
+==> 2번째 >>> EC2 구성 : 이름 : test-rdb-pri-2a<===
+==> 인스턴스 : 인스턴스시작 
+: 이름 및 태크 :  test-rdb-pri-2a
+
+: 애플리케이션 및 OS 이미지  
+:: Quick Start : Ubuntu : Ubuntu Server 24.04 LTS : free
+:: x86 : 사용자이름 : ubuntu
+
+: 인스턴스 유형 : t3.micro : free
+
+: 키페어(로그인) : 기존키페어 사용 :  251118-test 
+
+: 네트워크 설정 : 편집
+::VPC : test-vpc
+::서브넷 : test-subnet-rdb-pub-2a
+::퍼브릭IP 자동할당 : 비활성
+::방화벽(보안그룹) : 기존보안그룹 : test-sg-rdb
+:: 고급네트워크 구성 
+::기본IP : 10.0.2.10
+
+
+====================================
+==> EC2 구성 확인 : 2ea
+==> test-was-pub-2a 선택 :  하부 세부정보 10.0.0.10 / test-subnet-was-pub-2a
+==> test-rdb-pri-2a 선택 :  하부 세부정보 10.0.2.10 / test-subnet-rdb-pri-2a
+====================================
+==> 공인 IP 미리 받자 : 이유 IP 고정
+       3.36.79.13 (자신이 받은것) : test-was-pub-2a
+==> 고정IP 할당 : 탄력적 IP : ip 선택 : 작업 : ip 주소연결 : 인스턴스 
+==> 인스턴스에서 공인 IP 할당 확인하자.
+====================================
+==> EC2 구성 확인 : 2ea
+==> test-was-pub-2a 선택 :  하부 세부정보 : 공인 IP 할당 확인
+====================================
+
+
+
+================================================
+==>1.연결  :=> EC2 : public subnet 1EA
+: test-was-pub-2a 선택 : 상단 연결
+:: SSH 클라이언트 
+:: 필요시 : chmod 400 "251118-test.pem"
+:: ssh -i "251118-test.pem" ubuntu@3.36.79.13
+-----------------------------------------------------------------------
+
+1> winddow
+:: chmod 400 "251118-test.pem"
+:: ssh -i "251118-test.pem" ubuntu@3.36.79.13
+==> window 에서 chmod 설정 ????
+
+2> window : tool putty 사용
+: putty.org //==> putty.exe / puttygen.exe
+:putty 구동
+- ubuntu@3.36.79.13  22
+- connection / SSH / Auth / Credentials 
+  Private key file for authentication  => ppk 만지원
+
+---------------------------------
+.pem  ==> ppk 변경
+---------------------------------
+:puttygen 구동
+- load : 모든 파일보기 /=> ~~.pem 잡고
+- Save private key : ~~~.ppk 저장 : 경고 OK
+- 탐색기에 ~~~.ppk 확인
+--------------------------------
+
+: 다시 이전화면 putty 의
+- connection / SSH / Auth / Credentials 
+- Private key file for authentication  => ppk 만지원
+==> 지금 구성한 ~~~.ppk 선택
+- Saved Sessions :  ubuntu@3.36.79.13  하고 저장
+- open : 접속 OK.
+
+
+3> Tool : mobaxterm 사용
+:https://mobaxterm.mobatek.net/   
+: Download MobaXterm Home Edition (Portable edition )
+: 압축 풀고 : MobaXterm_Personal_24.2.exe  구동
+: 상단 session : new session
+:: ssh 선택
+:: Remote host : 3.36.79.13   specify username : ubuntu
+:: Advanced SSH setting :use private key : ~~~.pem
+- OK : 접속 OK.
+================================================
+
+
+
+
+================================================
+==> IDC Newwork 구성 및 연결 확인 <==
+================================================
+
+1> test-was-pub-2a 연결하고 아래 확인 
+ping  www.google.com
+ping 공인 IP(test-was-pub-2a)
+ping 10.0.0.10 (test-was-pub-2a) : 사설 ip
+ping 10.0.2.10 (test-rdb-pri-2a) : 사설 ip
+
+
+2>test-rdb-pri-2a 연결하고 아래 확인
+: 외부에서는 접근 불가 : 공인 IP 없다.
+: test-was-pub-2a  에서 내부망으로 접근 하려함.
+
+==>연결방법 확인
+: test-rdb-pri-2a 선택 : 상단 연결
+:: SSH 클라이언트 
+:: 필요시 : chmod 400 "251118-test.pem"
+:: ssh -i "251118-test.pem" ubuntu@10.0.2.10
+==> "251118-test.pem"  필요 확인
+: 251118-test.pem copy : MobaXterm 이용 : easy
+
+==> test-was-pub-2a 연결 콘솔에서  
+: chmod 400 "251118-test.pem"
+: ssh -i "251118-test.pem" ubuntu@10.0.2.10
+
+ping  www.google.com   ==> 안되는 이유 ???
+ping 공인 IP(test-was-pub-2a)  ==> 안되는 이유  ??? 
+ping 10.0.0.10 (test-was-pub-2a) : 사설 ip   ==> 되는 이유
+ping 10.0.2.10 (test-rdb-pri-2a) : 사설 ip   ==> 되는 이유
+
+종료 : exit
+
+================================================
+
+
+
+# Nat Gateway :  공인 IP 없는 private subnet 외부 단방향 연결(밖으로만...??)
+8. NAT GATEWAY 구성 :  [ProjectName]-ngw-[zone]
+- test-ngw-2a
+: 영역별선택 - test-subnet-was-pub-2a 에 설치
+: 탄력적 IP 할당 (공인 IP 할당 )
+
+
+9.Routing Table 구성: private subnet Nat Gateway 연결
+- test-rt-pri-2a 선택 : 하부 라우팅
+- 라우팅 편집
+0.0.0.0/0       ngw 연결 : test-ngw-2a  
+
+
+
+================================================
+==> 연결 확인 : EC2 : private subnet 1EA : NAT Gateway 연결 후<==
+
+1>test-rdb-pri-2a 연결하고 아래 확인
+: 외부에서는 접근 불가 : 공인 IP 없다.
+: test-was-pub-2a  에서 내부망으로 접근
+: 251118-test.pem copy : MobaXterm 이용 : easy  : 이미 했음.
+
+==> test-was-pub-2a 연결 콘솔에서  
+: chmod 400 "251118-test.pem"  : 이미 했음.
+: ssh -i "251118-test.pem" ubuntu@10.0.2.10
+
+ping  www.google.com   ==> 안되는 이유 ???  ==> 지금 되는 이유 ???
+ping 공인 IP(test-was-pub-2a)  ==> 안되는 이유  ???  ==> 지금 되는 이유 ???
+ping 10.0.0.10 (test-was-pub-2a) : 사설 ip   ==> 되는 이유
+ping 10.0.2.10 (test-rdb-pri-2a) : 사설 ip   ==> 되는 이유
+
+종료 : exit
+
+================================================
+
+
+
+
+
+####################################################
+================================================
+==> IDC 삭제(?) : 지금까지 모든 작업 삭제 : 역순으로...===
+9.Routing Table 구성: private subnet Nat Gateway 연결
+8. NAT GATEWAY 구성 :  [ProjectName]-ngw-[zone]
+7. EC2 구성 : public subnet / private subnet 에 1ea 씩 만들기(?)
+    ==> 공인 IP 반납 : 릴리즈 하세요 : 안쓰면 비용 발생
+6. SG(보안그룹, ACL) : [ProjectName]-sg-[설치]
+5. Routing Table 편집 : public subnet IGW 연결 
+4.IGW  : [ProjectName]-igw   =====> : VPC 분리 및 삭제
+3.Routing Table : [ProjectName]-rt-[public|private]-[zone]  ==> 서브넷 연결 해지 후 삭제 
+2. Subnet : [ProjectName]-subnet-[용도]-[public|private]-[zone]
+1. VPC : [ProjectName]-vpc
+================================================
+####################################################
